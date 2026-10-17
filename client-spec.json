@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "archetype": "sports-landing",
+  "brand": {
+    "name": "Sunrisers Leeds",
+    "industry": "Cricket Sports Club & Athletics",
+    "vibe": "energetic-premium",
+    "palette": {
+      "primary": "#0A0E1A",
+      "accent": "#FF6B00",
+      "secondary": "#F59E0B",
+      "background": "dark"
+    },
+    "tagline": "Unleash The Fire. Champions of Leeds.",
+    "logoUrl": "/placeholder/logo.svg"
+  },
+  "navigation": [
+    { "label": "About Club", "href": "#about" },
+    { "label": "Fixtures", "href": "#fixtures" },
+    { "label": "Squad", "href": "#squad" },
+    { "label": "Stats", "href": "#stats" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "leadCapture": {
+    "destinations": ["google_sheets", "email"],
+    "fields": ["fullName", "email", "phone", "service", "message"]
+  },
+  "contentSummaries": {
+    "heroHeadline": "The Pride & Passion of Leeds Cricket",
+    "heroSubheadline": "Official home of Sunrisers Leeds. Competing with grit, honor, and championship pedigree across all formats.",
+    "coreOfferings": [
+      {
+        "title": "Championship Fixtures",
+        "description": "Follow live match updates, scorecards, upcoming schedules, and home game tickets at Leeds."
+      },
+      {
+        "title": "Elite Cricket Academy",
+        "description": "World-class coaching, player pathways, high-performance training, and youth development programs."
+      },
+      {
+        "title": "Club Membership & Fans",
+        "description": "Exclusive fan club access, VIP matchday hospitality, official team merchandise, and community events."
+      }
+    ]
+  }
+}
