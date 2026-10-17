@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,7 +13,7 @@
     --popover: 228 30% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 25 100% 50%; /* #FF6B00 Sunrisers Flame */
+    --primary: 17 100% 51%; /* #FF4B03 Sunrisers Flame Primary */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 222 30% 14%;
@@ -26,20 +24,16 @@
 
     --accent: 38 92% 50%; /* #F59E0B Amber Gold */
     --accent-foreground: 228 35% 5%;
-    --accent-glow: rgba(255, 107, 0, 0.35);
+    --accent-glow: rgba(255, 75, 3, 0.4);
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 222 30% 14%;
     --input: 222 30% 14%;
-    --ring: 25 100% 50%;
+    --ring: 17 100% 51%;
 
     --radius: 0.5rem;
-
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 }
 
@@ -48,12 +42,12 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: var(--font-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-[#070A12] text-foreground antialiased;
+    font-family: var(--font-forma), var(--font-sans), Inter, sans-serif;
   }
-  h1, h2, h3, h4, .font-heading {
-    font-family: var(--font-heading);
+  h1, h2, h3, h4, .font-heading, .font-redzone {
+    font-family: var(--font-redzone), Impact, sans-serif;
+    letter-spacing: 0.02em;
   }
   html {
     scroll-behavior: smooth;
@@ -62,7 +56,7 @@
 
 /* Custom Sports Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
   background: #070a12;
@@ -72,24 +66,25 @@
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff6b00;
+  background: #ff4b03;
 }
 
 /* Flame & Athletic Utility Classes */
 .fireGlow {
-  box-shadow: 0 0 35px -5px rgba(255, 107, 0, 0.4);
+  box-shadow: 0 0 35px -5px rgba(255, 75, 3, 0.45);
 }
 
 .fireTextGlow {
-  text-shadow: 0 0 25px rgba(255, 107, 0, 0.5);
+  text-shadow: 0 0 30px rgba(255, 75, 3, 0.6);
 }
 
-.athleticBorder {
-  border: 1px solid rgba(255, 107, 0, 0.2);
-  transition: all 0.3s ease;
+/* Vertical grid lines background (like Nick Ho) */
+.bg-grid-lines {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: calc(100% / 6) 100%;
 }
-
-.athleticBorder:hover {
-  border-color: rgba(255, 107, 0, 0.6);
-  box-shadow: 0 0 25px rgba(255, 107, 0, 0.2);
+@media (min-width: 768px) {
+  .bg-grid-lines {
+    background-size: calc(100% / 8) 100%;
+  }
 }

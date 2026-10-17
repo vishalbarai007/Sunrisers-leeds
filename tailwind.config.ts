@@ -50,14 +50,15 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))"
         },
         sunrisers: {
-          DEFAULT: "#FF6B00",
-          hover: "#E05A00",
-          light: "#FFA040",
-          dark: "#B84300",
-          glow: "rgba(255, 107, 0, 0.35)",
+          DEFAULT: "#FF4B03",
+          fire: "#FF6B00",
+          bright: "#FF7D19",
+          amber: "#FE9A2A",
           gold: "#F59E0B",
+          dark: "#B83800",
           navy: "#0A0E1A",
-          charcoal: "#121826"
+          obsidian: "#070A12",
+          card: "#0E1526"
         }
       },
       borderRadius: {
@@ -66,13 +67,16 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)"
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "Inter", "sans-serif"],
-        heading: ["var(--font-heading)", "'Outfit'", "sans-serif"],
+        sans: ["var(--font-forma)", "var(--font-sans)", "Inter", "sans-serif"],
+        heading: ["var(--font-redzone)", "var(--font-heading)", "'Outfit'", "sans-serif"],
+        redzone: ["var(--font-redzone)", "Impact", "sans-serif"],
+        forma: ["var(--font-forma)", "Inter", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"]
       },
       boxShadow: {
-        sports: "0 10px 30px -10px rgba(255, 107, 0, 0.3)",
-        glow: "0 0 25px -5px var(--accent-glow)"
+        sports: "0 10px 30px -10px rgba(255, 75, 3, 0.4)",
+        glow: "0 0 30px -5px rgba(255, 107, 0, 0.45)",
+        flame: "0 0 50px rgba(255, 75, 3, 0.3)"
       }
     }
   },
