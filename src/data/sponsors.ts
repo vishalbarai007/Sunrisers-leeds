@@ -2,41 +2,40 @@ export interface SponsorItem {
   id: string;
   name: string;
   category?: string;
-  logoType?: "svg" | "text-mark";
-  svgPath?: string;
+  logoId?: string;
   subtext?: string;
 }
 
 export const LEFT_SPONSORS: SponsorItem[] = [
-  { id: "sp-1", name: "OKINII", category: "Dining Partner" },
-  { id: "sp-2", name: "PORSCHE", subtext: "Centrum Twente", category: "Automotive" },
-  { id: "sp-3", name: "RPM", subtext: "PARTNER", category: "Engineering" },
-  { id: "sp-4", name: "M-TECH", category: "Performance" },
-  { id: "sp-5", name: "BOKSMAN", category: "Logistics" },
-  { id: "sp-6", name: "DIRECT SOCIALS", category: "Media Agency" },
-  { id: "sp-7", name: "R&S", subtext: "HYDRAULIEK", category: "Industrial" },
-  { id: "sp-8", name: "PROMAD", subtext: "DE PROJECTENBEDENKERS", category: "Development" },
-  { id: "sp-9", name: "VBR", category: "Security" },
-  { id: "sp-10", name: "MULLER", subtext: "RACING", category: "Motorsport" },
-  { id: "sp-11", name: "KOOKABURRA", category: "Official Ball Partner" },
-  { id: "sp-12", name: "GRAY-NICOLLS", category: "Batting Gear" },
-  { id: "sp-13", name: "CASTORE", category: "Kit Manufacturer" },
-  { id: "sp-14", name: "MEURS", category: "Equipment" }
+  { id: "sp-castore", name: "CASTORE", logoId: "castore", category: "Kit Manufacturer" },
+  { id: "sp-porsche", name: "PORSCHE", logoId: "porsche", subtext: "Automotive Partner", category: "Official Automotive" },
+  { id: "sp-kookaburra", name: "KOOKABURRA", logoId: "kookaburra", category: "Official Match Ball" },
+  { id: "sp-redbull", name: "RED BULL", logoId: "redbull", category: "Energy Partner" },
+  { id: "sp-graynicolls", name: "GRAY-NICOLLS", logoId: "graynicolls", category: "Batting Gear" },
+  { id: "sp-dream11", name: "DREAM11", logoId: "dream11", category: "Principal Partner" },
+  { id: "sp-puma", name: "PUMA", logoId: "puma", category: "Athletic Footwear" },
+  { id: "sp-dhl", name: "DHL", logoId: "dhl", category: "Official Logistics" },
+  { id: "sp-tcl", name: "TCL", logoId: "tcl", category: "Official Display" },
+  { id: "sp-bkt", name: "BKT TIRES", logoId: "bkt", category: "Official Tyre Partner" },
+  { id: "sp-nb", name: "NEW BALANCE", logoId: "newbalance", category: "Equipment Partner" },
+  { id: "sp-gulf", name: "GULF OIL", logoId: "gulfoil", category: "Lubricant Partner" },
+  { id: "sp-boat", name: "boAt", logoId: "boat", category: "Audio Partner" },
+  { id: "sp-fancode", name: "FANCODE", logoId: "fancode", category: "Merchandise & Stream" }
 ];
 
 export const RIGHT_SPONSORS: SponsorItem[] = [
-  { id: "sp-15", name: "OCS", category: "Consulting" },
-  { id: "sp-16", name: "BORING", category: "Apparel" },
-  { id: "sp-17", name: "CLUB CLUB", category: "Hospitality" },
-  { id: "sp-18", name: "D&B GROUP", category: "Facilities" },
-  { id: "sp-19", name: "PROJECT TEAM", category: "Management" },
-  { id: "sp-20", name: "WR RAPTOR", category: "Automotive" },
-  { id: "sp-21", name: "CJPG", subtext: "Technical Maintenance", category: "Technical" },
-  { id: "sp-22", name: "LEGALITAS", subtext: "ADVOCATEN", category: "Legal Partner" },
-  { id: "sp-23", name: "BLUELEMON24", category: "Digital Solutions" },
-  { id: "sp-24", name: "YOULYNQ.ME", category: "Communications" },
-  { id: "sp-25", name: "{BI}XP", category: "Business Intelligence" },
-  { id: "sp-26", name: "DRUMARKON", category: "Materials" },
-  { id: "sp-27", name: "RED BULL", category: "Energy Partner" },
-  { id: "sp-28", name: "MCCAFE", category: "Beverage Partner" }
+  { id: "sp-emirates", name: "EMIRATES", logoId: "emirates", category: "Official Airline" },
+  { id: "sp-mrf", name: "MRF", logoId: "mrf", category: "Batting Partner" },
+  { id: "sp-ceat", name: "CEAT", logoId: "ceat", category: "Timeout Partner" },
+  { id: "sp-jio", name: "JIO 5G", logoId: "jio", category: "Digital Partner" },
+  { id: "sp-monster", name: "MONSTER ENERGY", logoId: "monster", category: "Beverage Partner" },
+  { id: "sp-spotify", name: "SPOTIFY", logoId: "spotify", category: "Music Partner" },
+  { id: "sp-sg", name: "SG CRICKET", logoId: "sg", category: "Gear Manufacturer" },
+  { id: "sp-toyota", name: "TOYOTA", logoId: "toyota", category: "Mobility Partner" },
+  { id: "sp-aston", name: "ASTON MARTIN", logoId: "astonmartin", category: "Luxury Partner" },
+  { id: "sp-sony", name: "SONY SPORTS", logoId: "sonysports", category: "Broadcast Partner" },
+  { id: "sp-gatorade", name: "GATORADE", logoId: "gatorade", category: "Hydration Partner" },
+  { id: "sp-oakley", name: "OAKLEY", logoId: "oakley", category: "Eyewear Partner" },
+  { id: "sp-ua", name: "UNDER ARMOUR", logoId: "underarmour", category: "Training Apparel" },
+  { id: "sp-sundirect", name: "SUN DIRECT", logoId: "sundirect", category: "Media Partner" }
 ];

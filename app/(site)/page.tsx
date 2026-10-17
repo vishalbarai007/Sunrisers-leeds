@@ -7,6 +7,8 @@ import { NewsSection } from "@/components/sections/NewsSection";
 import { MilestoneSection } from "@/components/sections/MilestoneSection";
 import { SpotlightSection } from "@/components/sections/SpotlightSection";
 import { SponsorsSection } from "@/components/sections/SponsorsSection";
+import { GallerySection } from "@/components/sections/GallerySection";
+import { ContactSection } from "@/components/sections/ContactSection";
 
 export default function HomePage() {
   return (
@@ -35,7 +37,11 @@ export default function HomePage() {
       {/* Section 8: Sponsors (3D Red Season Ball & Sponsors Grid with 200vh pinned scroll) */}
       <SponsorsSection />
 
-      {/* Section 9: Gallery */}
+      {/* Section 9: Gallery (GSAP 3-Card expanding to 100vw x 100vh full-screen carousel) */}
+      <GallerySection />
+
+      {/* Section 10: Contact (White bg, full-height fading orange gradient CONTACT text & semi-transparent orange form) */}
+      <ContactSection />
 
       {/* Sunrisers Leeds Footer */}
       <Footer />

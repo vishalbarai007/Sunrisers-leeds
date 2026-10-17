@@ -5,20 +5,22 @@ import Link from "next/link";
 import { ChevronsRight, Sparkles } from "lucide-react";
 import { CricketBall3D } from "@/components/3d/CricketBall3D";
 import { LEFT_SPONSORS, RIGHT_SPONSORS, SponsorItem } from "@/data/sponsors";
+import { SponsorLogo } from "./SponsorLogos";
 
 function SponsorCard({ item }: { item: SponsorItem }) {
   return (
-    <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl border border-slate-100 bg-white/70 hover:bg-white hover:border-[#FF4B03]/30 hover:shadow-md transition-all duration-300 group min-h-[72px] sm:min-h-[88px] text-center w-full">
-      <span className="font-forma text-xs sm:text-sm md:text-base font-extrabold text-slate-800 tracking-wider uppercase group-hover:text-[#FF4B03] transition-colors leading-tight">
-        {item.name}
-      </span>
-      {item.subtext && (
-        <span className="font-forma text-[9px] sm:text-[10px] text-slate-400 font-semibold tracking-widest uppercase mt-0.5">
-          {item.subtext}
-        </span>
-      )}
+    <div
+      title={item.name}
+      className="flex flex-col items-center justify-center p-3 sm:p-3.5 rounded-xl border border-slate-200/90 bg-white/80 hover:bg-white hover:border-[#FF4B03]/40 hover:shadow-lg hover:shadow-orange-500/10 transition-all duration-300 group min-h-[76px] sm:min-h-[92px] text-center w-full relative overflow-hidden backdrop-blur-sm"
+    >
+      {/* Brand Logo */}
+      <div className="w-full flex items-center justify-center h-8 sm:h-9 text-slate-700 group-hover:text-black transition-all duration-300 group-hover:scale-105">
+        <SponsorLogo item={item} />
+      </div>
+
+      {/* Category Subtitle */}
       {item.category && (
-        <span className="font-forma text-[8px] sm:text-[9px] text-slate-400 font-medium tracking-tight mt-1 opacity-60 group-hover:opacity-100 transition-opacity">
+        <span className="font-forma text-[8px] sm:text-[9px] text-slate-400 group-hover:text-slate-600 font-semibold tracking-wider uppercase mt-1.5 transition-colors line-clamp-1">
           {item.category}
         </span>
       )}
@@ -126,10 +128,7 @@ export function SponsorsSection() {
                 <ChevronsRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
 
-              {/* Decorative Four-Point Compass Star matching reference */}
-              <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#FF4B03] shadow-sm">
-                <Sparkles className="w-4 h-4 fill-current" />
-              </div>
+            
             </div>
           </div>
 
@@ -159,18 +158,19 @@ export function SponsorsSection() {
         </div>
 
         {/* Mobile-only Sponsor Strip beneath the ball */}
-        <div className="md:hidden w-full overflow-hidden border-t border-slate-200 bg-slate-50/80 py-2.5 px-3 z-20">
-          <div className="flex gap-2 overflow-x-auto no-scrollbar">
+        <div className="md:hidden w-full overflow-hidden border-t border-slate-200 bg-slate-50/90 py-2.5 px-3 z-20">
+          <div className="flex gap-2.5 overflow-x-auto no-scrollbar items-center">
             {LEFT_SPONSORS.concat(RIGHT_SPONSORS)
-              .slice(0, 10)
+              .slice(0, 14)
               .map((item) => (
                 <div
                   key={`mob-${item.id}`}
-                  className="shrink-0 px-3 py-1.5 rounded-md bg-white border border-slate-200 text-center"
+                  title={item.name}
+                  className="shrink-0 px-3 py-2 rounded-lg bg-white border border-slate-200/90 flex flex-col items-center justify-center min-w-[110px] h-12 shadow-sm"
                 >
-                  <span className="font-forma text-[11px] font-extrabold text-slate-800">
-                    {item.name}
-                  </span>
+                  <div className="h-6 w-full flex items-center justify-center text-slate-700">
+                    <SponsorLogo item={item} className="h-5 w-auto max-w-[85px] object-contain" />
+                  </div>
                 </div>
               ))}
           </div>

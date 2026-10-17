@@ -33,7 +33,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative w-full bg-gradient-to-br from-[#D93800] via-[#F4570B] to-[#C92F00] text-white pt-20 sm:pt-24 pb-8 overflow-hidden border-t border-[#FF7324]/40 select-none">
+    <footer id="footer" className="relative w-full bg-gradient-to-br from-[#D93800] via-[#F4570B] to-[#C92F00] text-white pt-20 sm:pt-24 pb-8 overflow-hidden border-t border-[#FF7324]/40 select-none">
       {/* Subtle Architectural Grid Lines in background */}
       <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-8 pointer-events-none z-0">
         <div className="border-r border-white/[0.06] h-full" />
