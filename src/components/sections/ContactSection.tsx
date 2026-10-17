@@ -134,15 +134,15 @@ export function ContactSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-[1040px] rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#E64200]/90 via-[#FF5500]/85 to-[#C92F00]/90 backdrop-blur-md border border-white/30 shadow-[0_25px_70px_-15px_rgba(230,66,0,0.45)] p-6 sm:p-10 md:p-12 lg:p-14 text-white"
+        className="relative z-10 w-full max-w-[1280px] min-h-[580px] sm:min-h-[640px] lg:min-h-[680px] rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#E64200]/92 via-[#FF5500]/88 to-[#C92F00]/92 backdrop-blur-md border border-white/30 shadow-[0_30px_90px_-15px_rgba(230,66,0,0.5)] p-8 sm:p-12 md:p-16 lg:p-20 text-white flex flex-col justify-center"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-start">
           {/* Left Column: Heading & Subtext */}
           <div className="lg:col-span-5 flex flex-col justify-start">
-            <h2 className="font-redzone text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-wide text-white leading-[0.95]">
+            <h2 className="font-redzone text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-wide text-white leading-[0.92]">
               CONTACT
             </h2>
-            <p className="font-forma text-xs sm:text-sm text-white/85 mt-3 font-medium">
+            <p className="font-forma text-sm sm:text-base md:text-lg text-white/90 mt-4 sm:mt-6 font-medium leading-relaxed max-w-sm">
               Ready to support or just have questions ?
             </p>
           </div>
@@ -150,33 +150,33 @@ export function ContactSection() {
           {/* Right Column: Contact Form */}
           <div className="lg:col-span-7 w-full">
             {submitted ? (
-              <div className="rounded-xl bg-white/15 border border-white/30 p-6 sm:p-8 flex flex-col items-start gap-4 backdrop-blur-sm">
+              <div className="rounded-2xl bg-white/15 border border-white/30 p-8 sm:p-12 flex flex-col items-start gap-5 backdrop-blur-sm">
                 <div className="flex items-center gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-white shrink-0" />
-                  <h3 className="font-redzone text-xl sm:text-2xl uppercase tracking-wide text-white">
+                  <CheckCircle2 className="w-7 h-7 text-white shrink-0" />
+                  <h3 className="font-redzone text-2xl sm:text-3xl uppercase tracking-wide text-white">
                     Message Received
                   </h3>
                 </div>
-                <p className="font-forma text-sm text-white/90 leading-relaxed">
+                <p className="font-forma text-base sm:text-lg text-white/90 leading-relaxed">
                   Thank you! Your message has been received by the Sunrisers Leeds team. We will get back to you shortly.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[#D93800] hover:bg-white/95 font-redzone text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white text-[#D93800] hover:bg-white/95 font-redzone text-sm uppercase tracking-wider shadow-md transition-all cursor-pointer font-bold"
                 >
                   <span>Send Another Message</span>
                   <ChevronsRight className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                 {/* First Name & Last Name */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                  <div className="flex flex-col gap-2">
                     <label
                       htmlFor="contact-first-name"
-                      className="font-forma text-xs font-semibold text-white/90"
+                      className="font-forma text-xs sm:text-sm font-bold text-white/95 tracking-wide"
                     >
                       First Name
                     </label>
@@ -187,14 +187,14 @@ export function ContactSection() {
                       onChange={(e) => setFirstName(e.target.value)}
                       placeholder="John"
                       required
-                      className="w-full rounded-md bg-white/20 border border-white/30 px-3.5 py-2.5 text-sm font-forma text-white placeholder:text-white/65 focus:outline-none focus:bg-white/25 focus:border-white transition-all"
+                      className="w-full rounded-lg bg-white/20 border border-white/30 px-4 sm:px-5 py-3.5 sm:py-4 text-sm sm:text-base font-forma text-white placeholder:text-white/65 focus:outline-none focus:bg-white/25 focus:border-white transition-all shadow-inner"
                     />
                   </div>
 
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-2">
                     <label
                       htmlFor="contact-last-name"
-                      className="font-forma text-xs font-semibold text-white/90"
+                      className="font-forma text-xs sm:text-sm font-bold text-white/95 tracking-wide"
                     >
                       Last Name
                     </label>
@@ -205,16 +205,16 @@ export function ContactSection() {
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="Doe"
                       required
-                      className="w-full rounded-md bg-white/20 border border-white/30 px-3.5 py-2.5 text-sm font-forma text-white placeholder:text-white/65 focus:outline-none focus:bg-white/25 focus:border-white transition-all"
+                      className="w-full rounded-lg bg-white/20 border border-white/30 px-4 sm:px-5 py-3.5 sm:py-4 text-sm sm:text-base font-forma text-white placeholder:text-white/65 focus:outline-none focus:bg-white/25 focus:border-white transition-all shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Email */}
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-2">
                   <label
                     htmlFor="contact-email"
-                    className="font-forma text-xs font-semibold text-white/90"
+                    className="font-forma text-xs sm:text-sm font-bold text-white/95 tracking-wide"
                   >
                     Email
                   </label>
@@ -225,39 +225,39 @@ export function ContactSection() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="johndoe@gmail.com"
                     required
-                    className="w-full rounded-md bg-white/20 border border-white/30 px-3.5 py-2.5 text-sm font-forma text-white placeholder:text-white/65 focus:outline-none focus:bg-white/25 focus:border-white transition-all"
+                    className="w-full rounded-lg bg-white/20 border border-white/30 px-4 sm:px-5 py-3.5 sm:py-4 text-sm sm:text-base font-forma text-white placeholder:text-white/65 focus:outline-none focus:bg-white/25 focus:border-white transition-all shadow-inner"
                   />
                 </div>
 
                 {/* Message */}
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-2">
                   <label
                     htmlFor="contact-message"
-                    className="font-forma text-xs font-semibold text-white/90"
+                    className="font-forma text-xs sm:text-sm font-bold text-white/95 tracking-wide"
                   >
                     Message
                   </label>
                   <textarea
                     id="contact-message"
-                    rows={4}
+                    rows={5}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type your message just here..."
                     required
-                    className="w-full rounded-md bg-white/20 border border-white/30 px-3.5 py-2.5 text-sm font-forma text-white placeholder:text-white/65 focus:outline-none focus:bg-white/25 focus:border-white transition-all resize-y min-h-[110px]"
+                    className="w-full rounded-lg bg-white/20 border border-white/30 px-4 sm:px-5 py-3.5 sm:py-4 text-sm sm:text-base font-forma text-white placeholder:text-white/65 focus:outline-none focus:bg-white/25 focus:border-white transition-all resize-y min-h-[160px] sm:min-h-[190px] shadow-inner"
                   />
                 </div>
 
                 {/* White Submit Button */}
-                <div className="pt-1">
+                <div className="pt-2">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group inline-flex items-center justify-center gap-1.5 px-6 py-2.5 rounded-md bg-[#FFFFFF] text-[#D93800] hover:bg-white/95 font-redzone text-sm font-black uppercase tracking-wider shadow-lg hover:shadow-xl active:scale-95 transition-all cursor-pointer disabled:opacity-70"
+                    className="group inline-flex items-center justify-center gap-2 px-8 sm:px-10 py-3.5 sm:py-4 rounded-lg bg-[#FFFFFF] text-[#D93800] hover:bg-white/95 font-redzone text-sm sm:text-base font-black uppercase tracking-wider shadow-xl hover:shadow-2xl active:scale-95 transition-all cursor-pointer disabled:opacity-70"
                   >
                     <span>{isSubmitting ? "SUBMITTING..." : "SUBMIT"}</span>
                     <ChevronsRight
-                      className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                      className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1"
                       strokeWidth={2.8}
                     />
                   </button>
