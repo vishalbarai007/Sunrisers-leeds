@@ -1,12 +1,13 @@
 import { NavItem } from "@/types/dataContracts";
 
 export const mainNavItems: NavItem[] = [
-  { label: "About", href: "#about" },
+  { label: "Tickets", href: "#tickets" },
+  { label: "Squads", href: "#squads" },
   { label: "Fixtures", href: "#fixtures" },
-  { label: "Squad", href: "#squad" },
-  { label: "Stats", href: "#stats" },
-  { label: "Academy", href: "#academy" },
-  { label: "Contact", href: "#contact" }
+  { label: "Spotlight", href: "#spotlight" },
+  { label: "News", href: "#news" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Profile", href: "#profile" }
 ];
 
 export const footerNavItems: NavItem[] = [

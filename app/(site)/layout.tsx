@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { siteConfig } from "@/data/siteConfig";
 import { Toaster } from "sonner";
 import { SmoothScrollProvider } from "@/components/animations/SmoothScrollProvider";
+import { Navbar } from "@/components/reusable/Navbar";
 import "../globals.css";
 
 const vtfRedzone = localFont({
@@ -48,6 +49,7 @@ export default function RootLayout({
     <html lang="en" className={`dark ${vtfRedzone.variable} ${formaDjr.variable}`}>
       <body className="bg-[#070A12] text-slate-100 min-h-screen flex flex-col selection:bg-[#FF6B00] selection:text-white font-sans antialiased overflow-x-hidden">
         <SmoothScrollProvider>
+          <Navbar />
           {children}
           <Toaster position="bottom-right" theme="dark" richColors />
         </SmoothScrollProvider>

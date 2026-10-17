@@ -88,3 +88,61 @@
     background-size: calc(100% / 8) 100%;
   }
 }
+
+/* Nick Ho Fullscreen Menu Curtain Animation */
+.fullscreen-menu-tile {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+  transition: clip-path 0.85s cubic-bezier(0.9, 0, 0.1, 1);
+  will-change: clip-path;
+}
+
+.fullscreen-menu-tile.is-active {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Staggered Link Entrance (Nick Ho transform translateY + rotate) */
+.menu-item-link {
+  transform: translateY(115%) rotate(4deg);
+  opacity: 0;
+  transition: transform 0.65s cubic-bezier(0.7, 0, 0.3, 1), opacity 0.5s ease;
+  will-change: transform, opacity;
+}
+
+.is-active .menu-item-wrapper:nth-child(1) .menu-item-link { transition-delay: 0.22s; }
+.is-active .menu-item-wrapper:nth-child(2) .menu-item-link { transition-delay: 0.27s; }
+.is-active .menu-item-wrapper:nth-child(3) .menu-item-link { transition-delay: 0.32s; }
+.is-active .menu-item-wrapper:nth-child(4) .menu-item-link { transition-delay: 0.37s; }
+.is-active .menu-item-wrapper:nth-child(5) .menu-item-link { transition-delay: 0.42s; }
+.is-active .menu-item-wrapper:nth-child(6) .menu-item-link { transition-delay: 0.47s; }
+.is-active .menu-item-wrapper:nth-child(7) .menu-item-link { transition-delay: 0.52s; }
+
+.is-active .menu-item-link {
+  transform: translateY(0%) rotate(0.001deg);
+  opacity: 1;
+}
+
+/* Nick Ho List Item Dimming Hover Effect */
+.menu-nav-list {
+  transition: opacity 0.3s ease;
+}
+
+.menu-nav-list:has(.menu-item-wrapper:hover) .menu-item-wrapper {
+  opacity: 0.22;
+  transition: opacity 0.3s cubic-bezier(0.7, 0, 0.3, 1), transform 0.3s ease;
+}
+
+.menu-nav-list:has(.menu-item-wrapper:hover) .menu-item-wrapper:hover {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+/* Dual text rolling animation */
+.menu-text-roll {
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.7, 0, 0.3, 1);
+  transform: translateY(0%);
+}
+
+.menu-item-link:hover .menu-text-roll {
+  transform: translateY(-50%);
+}
