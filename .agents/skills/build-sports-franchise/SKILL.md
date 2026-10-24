@@ -220,12 +220,17 @@ useEffect(() => {
 
 ---
 
-## 🎨 Design Tokens & Theming
+## 🎨 Design Tokens, Unified Rules & Mobile-Native Craft
 
-- **Background Void**: `#070A12` / `#0A0E1A`
-- **Primary Energy**: Vibrant Club Gradient (e.g., `#FF4E03` Sunrisers Orange, `#E10600` Racing Red, `#0047AB` Cobalt)
+- **Master Rulebook Compliance (`.agents/rules/rules.md`)**:
+  - **Centralized GSAP (`src/lib/gsap.ts`)**: Import `gsap`, `ScrollTrigger`, and `useGSAP` from `@/lib/gsap`. Wrap all timelines in `useGSAP` with a `scope` ref and gate desktop-only pinning inside `gsap.matchMedia()` for `(min-width: 768px)` and `(prefers-reduced-motion: reduce)`.
+  - **Zero Hardcoded Copy**: All section titles, player stats, gallery slides, and labels must live in `src/data/*.ts` (or `content/site.ts` when sourced from `client/copy.md`). Never hardcode arrays or copy inside section `.tsx` files.
+  - **Modular File Size (<250 lines target)**: Extract sub-components (e.g., `PlayerCard`, `FixtureSlide`, `BentoCard`, `SponsorCard`) into `src/components/reusable/` or dedicated sub-files so section components stay clean and modular.
+  - **Mobile-Native Feel (`mobile-native`)**: Use `min-h-[100svh]` on the Hero, `16px` minimum font size on form inputs, `tabular-nums` on countdown clocks and points tables, `@media (hover: hover) and (pointer: fine)` on hover effects, and `:active { transform: scale(0.97) }` press feedback on buttons.
+- **Background Void**: `#070A12` / `#0A0E1A` (mapped to semantic `--background` and `--surface` tokens in `app/globals.css`)
+- **Primary Energy**: Vibrant Club Gradient (e.g., `#FF4E03` Sunrisers Orange, `#E10600` Racing Red, `#0047AB` Cobalt — mapped to `--primary`)
 - **Glassmorphic Cards**: `bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/20 hover:border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.12)]`
-- **Highlight Gold**: `#FFCB05`
+- **Highlight Gold**: `#FFCB05` (`--accent`)
 - **Fonts**:
-  - `font-redzone`: Condensed athletic display font for all major titles
-  - `font-forma`: Modern geometric sans-serif for metadata, stats, and body copy
+  - `font-redzone`: Condensed athletic display font for all major titles (`--font-heading`)
+  - `font-forma`: Modern geometric sans-serif for metadata, stats, and body copy (`--font-sans`)

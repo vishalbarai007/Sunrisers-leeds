@@ -1,29 +1,32 @@
 ---
 name: build-brand-gsap
-description: Generates an interactive, brand-focused landing page with GSAP ScrollTrigger animations, smooth scrolling (Lenis), and editorial typography.
+description: Generates an interactive, brand-focused landing page with centralized GSAP ScrollTrigger animations, smooth scrolling (Lenis), semantic tokens, and editorial typography.
 ---
 
-# Objective
-Scaffold a high-interaction, luxury agency or architectural website featuring momentum smooth scrolling, pinned storytelling sequences, and parallax visual depth.
+# Brand Storytelling & GSAP Microsite Generator (`build-brand-gsap`)
 
-# Workflow Instructions
+Scaffolds a high-interaction luxury agency, architectural, or flagship brand website featuring momentum smooth scrolling (Lenis), pinned storytelling sequences, and parallax visual depth. Follows `.agents/rules/rules.md` (**Tier 2 Immersive Showcase** budget).
 
-1. **Provider Setup**:
-   - Wrap `app/(site)/layout.tsx` in `<SmoothScrollProvider>`.
-   - Register `ScrollTrigger` and tie into the Lenis scroll loop.
+## Workflow Instructions
 
-2. **Typography & Styling**:
-   - Apply editorial serif typography (Cormorant Garamond / Playfair Display) paired with Plus Jakarta Sans.
-   - Use high-contrast obsidian backgrounds (`#0F0F11`) with champagne gold or lime accents.
+1. **Provider & Centralized GSAP Setup (`src/lib/gsap.ts`)**:
+   - Register `gsap`, `ScrollTrigger`, and `useGSAP` once in `src/lib/gsap.ts`.
+   - Wrap `app/(site)/layout.tsx` in `<SmoothScrollProvider>` (Lenis synced to `gsap.ticker`).
 
-3. **Motion Architecture**:
-   - Hero: Parallax scroll on background image using `gsap.to(..., { yPercent: 20 })`.
-   - Narrative Section: 3-slide horizontal card scrub pinned with `ScrollTrigger.create({ pin: true, scrub: 1 })`.
-   - Staggered split-text reveals on value proposition headers.
+2. **Typography & Semantic Tokens (`landing-page-styles`)**:
+   - Load max two font families via `next/font` (`display: "swap"`): editorial serif (`Cormorant Garamond` or `Playfair Display`) paired with `Plus Jakarta Sans`.
+   - Define semantic tokens in `app/globals.css` (e.g., Deep Obsidian `#0F0F11` background with Champagne Gold `#C5A880` accent) and verify 4.5:1 text contrast.
+   - Use shared `<Section>`, `<Container>`, and `<SectionHeader>` primitives.
 
-4. **Data Contract Compliance**:
-   - Populate showcase cards in `src/data/offerings.ts`.
-   - The UI components in `src/components/sections/` must only read and iterate over this data.
+3. **Motion Architecture (`landing-page-animations` + `animate`)**:
+   - Wrap all section animations in `useGSAP(() => { ... }, { scope })` and gate desktop pinning inside `gsap.matchMedia()` for `(min-width: 768px)` and `(prefers-reduced-motion: reduce)`.
+   - **Hero (`min-h-[100svh]`)**: Staggered headline entrance + subtle parallax on background media (`yPercent: 15`, GPU `transform` only).
+   - **Narrative Section**: 3-slide horizontal card scrub pinned on desktop (`pin: true, scrub: 1`); clean vertical stack or touch-swipe carousel (`touch-action: pan-y`) on mobile (`< 768px`).
+   - **Button & Interactive Craft (`design-eng`)**: Gate `:hover` inside `@media (hover: hover) and (pointer: fine)` and apply `:active { transform: scale(0.97) }` press feedback (`150ms ease-out`).
 
-5. **Form Integration**:
-   - Place a dark-mode VIP access inquiry form in the footer calling `submitContactForm`.
+4. **Decoupled Content Compliance**:
+   - Store all copy and showcase items in `content/site.ts` (from `client/copy.md`) or `src/data/*.ts` (`src/data/offerings.ts`, `src/data/hero.ts`). Zero hardcoded copy in JSX.
+
+5. **Form Integration & QA**:
+   - Place a dark-mode VIP access inquiry form (`16px` min input font size, Zod validation, honeypot) calling `submitContactForm`.
+   - Audit animations with `review-animations` and `animation-performance` before running `npm run build`.

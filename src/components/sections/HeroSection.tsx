@@ -307,61 +307,17 @@ export function HeroSection() {
         {/* Bottom-Right Corner: Next Fixture Card with Live Ticking Countdown */}
         <div
           ref={bottomRightRef}
-          className="w-full max-w-[300px] sm:max-w-[270px] md:max-w-xs lg:max-w-sm sm:ml-auto pointer-events-auto"
+          className="w-full max-w-[300px] sm:max-w-[270px] md:max-w-xs lg:max-w-sm text-center sm:text-left sm:ml-auto pointer-events-auto"
         >
-          <div className="relative overflow-hidden p-2.5 sm:p-3.5 md:p-4 lg:p-5 rounded-xl border border-white/20 bg-[#0A0E1A]/40 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_32px_0_rgba(0,0,0,0.37),inset_0_1px_1px_0_rgba(255,255,255,0.2)] w-full transition-all duration-300 hover:border-white/30">
-            {/* Top specular highlight for authentic glass finish */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-            <div className="flex items-center justify-between gap-2 sm:gap-3 mb-1.5 sm:mb-2.5">
-              <span className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded bg-[#FF4B03] text-[#070A12] text-[9px] sm:text-[10px] font-redzone font-black uppercase tracking-wider shadow-sm">
-                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                <span>Next Fixture</span>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-2.5 text-[9px] sm:text-[11px] font-forma font-bold text-slate-500 uppercase tracking-widest">
+            {heroData.partners.map((partner, i) => (
+              <span key={partner} className="flex items-center gap-2 sm:gap-2.5">
+                <span className="hover:text-slate-300 transition-colors">{partner}</span>
+                {i < heroData.partners.length - 1 && (
+                  <span className="text-white/20">&bull;</span>
+                )}
               </span>
-              <span className="text-[10px] sm:text-[11px] font-forma font-semibold text-slate-300 truncate">
-                {heroData.rightInfo.nextMatch.venue}
-              </span>
-            </div>
-
-            <div className="font-redzone text-base sm:text-xl lg:text-2xl font-black text-white uppercase tracking-wide mb-1.5 sm:mb-2.5">
-              {heroData.rightInfo.nextMatch.opponent}
-            </div>
-
-            {/* Countdown Ticker Blocks */}
-            {/* <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-center pt-1.5 sm:pt-2 border-t border-white/10">
-              <div className="bg-white/[0.06] backdrop-blur-sm rounded-md py-1 sm:py-1.5 px-1 border border-white/10">
-                <div className="font-redzone text-sm sm:text-lg lg:text-xl font-bold text-white leading-tight">
-                  {timeLeft.days}
-                </div>
-                <div className="font-forma text-[7px] sm:text-[8px] uppercase tracking-wider text-slate-400">
-                  Days
-                </div>
-              </div>
-              <div className="bg-white/[0.06] backdrop-blur-sm rounded-md py-1 sm:py-1.5 px-1 border border-white/10">
-                <div className="font-redzone text-sm sm:text-lg lg:text-xl font-bold text-white leading-tight">
-                  {timeLeft.hours}
-                </div>
-                <div className="font-forma text-[7px] sm:text-[8px] uppercase tracking-wider text-slate-400">
-                  Hours
-                </div>
-              </div>
-              <div className="bg-white/[0.06] backdrop-blur-sm rounded-md py-1 sm:py-1.5 px-1 border border-white/10">
-                <div className="font-redzone text-sm sm:text-lg lg:text-xl font-bold text-white leading-tight">
-                  {timeLeft.minutes}
-                </div>
-                <div className="font-forma text-[7px] sm:text-[8px] uppercase tracking-wider text-slate-400">
-                  Mins
-                </div>
-              </div>
-              <div className="bg-white/[0.06] backdrop-blur-sm rounded-md py-1 sm:py-1.5 px-1 border border-white/10">
-                <div className="font-redzone text-sm sm:text-lg lg:text-xl font-bold text-[#FF4B03] leading-tight">
-                  {timeLeft.seconds}
-                </div>
-                <div className="font-forma text-[7px] sm:text-[8px] uppercase tracking-wider text-slate-400">
-                  Secs
-                </div>
-              </div>
-            </div> */}
+            ))}
           </div>
         </div>
       </div>

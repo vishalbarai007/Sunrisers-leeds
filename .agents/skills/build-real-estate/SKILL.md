@@ -225,7 +225,12 @@ Set `"archetype": "real-estate"` and fill in the brand details:
 ### Step 3: Verify Assembly in `app/(site)/page.tsx`
 Ensure all 10 core components and 3 modals are imported and wired with state handlers for `isBookingOpen`, `isBrochureOpen`, and `isBrandFilmOpen`.
 
-### Step 4: Validate Mobile & Desktop Experience
+### Step 4: Validate Mobile-Native Craft, Unified Rules & Desktop Experience
+- **Master Rulebook Compliance (`.agents/rules/rules.md`)**:
+  - Register GSAP once in `src/lib/gsap.ts` and wrap timelines in `useGSAP` with `gsap.matchMedia()` for `(min-width: 768px)` and `(prefers-reduced-motion: reduce)`.
+  - Keep all section files modular (under ~250 lines by extracting modal and card sub-components) with zero hardcoded copy in JSX (`src/data/*.ts` or `content/site.ts` from `client/copy.md`).
+  - Use shadcn/Radix `Dialog` / `Sheet` primitives for `BookingModal`, `BrochureModal`, and `BrandFilmModal` with `--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1)`.
+  - Apply `mobile-native` standards: `min-h-[100svh]` on Hero, `16px` minimum input font size, `tabular-nums` on carpet areas/prices, and `:active { transform: scale(0.97) }` on buttons.
 - Test all modals on viewport widths from 375px (iPhone) to 1440px+ (Desktop).
 - Confirm floorplan image zoom works with touch and mouse.
 - Confirm lead form submits cleanly to Google Sheets and sends confirmation email.

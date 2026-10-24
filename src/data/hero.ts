@@ -21,7 +21,7 @@ export interface HeroData {
       countdownTarget: string;
     };
   };
-  // partners: string[];
+  partners: string[];
   imageSrc: string;
 }
 
@@ -47,6 +47,6 @@ export const heroData: HeroData = {
       countdownTarget: "04:18:32:10"
     }
   },
-  // partners: ["APEX GROUP", "CASTORE", "THE HUNDRED", "VITALITY"],
+  partners: ["DREAM 11", "FLY EMIRATES", "RED BULL", "MRF"],
   imageSrc: "/images/team-hero-opt.jpg"
 };
