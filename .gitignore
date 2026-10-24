@@ -12,6 +12,7 @@ node_modules/
 # Agency Microsite Engine (local development reference only)
 agency-microsite-engine/
 agent-microsite-engine/
+doable-frontend-claude/
 
 # Next.js build output
 .next/
