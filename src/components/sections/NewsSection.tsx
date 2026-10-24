@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,44 +29,90 @@ const BENTO_ICONS = [
   Compass
 ];
 
+// Helper to safely get articles with circular wrap-around
+const getArticleAt = (index: number): NewsItem => {
+  const total = newsArticles.length;
+  return newsArticles[((index % total) + total) % total];
+};
+
+const cardVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? "100%" : "-100%",
+    opacity: 0,
+    scale: 0.98,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.28,
+      ease: [0.22, 1, 0.36, 1], // easeOutCubic
+    },
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? "-100%" : "100%",
+    opacity: 0,
+    scale: 0.98,
+    transition: {
+      duration: 0.22,
+      ease: [0.32, 0, 0.67, 0], // easeInCubic
+    },
+  }),
+};
+
 interface BentoCardProps {
   article: NewsItem;
   slotIndex: number;
   isWide?: boolean;
+  direction?: number;
 }
 
-function BentoCard({ article, slotIndex, isWide = false }: BentoCardProps) {
+function BentoCard({
+  article,
+  slotIndex,
+  isWide = false,
+  direction = 1
+}: BentoCardProps) {
   const IconComponent = BENTO_ICONS[slotIndex % BENTO_ICONS.length];
+  const [imgSrc, setImgSrc] = useState(article.image);
+
+  // Sync image if article updates
+  useEffect(() => {
+    setImgSrc(article.image);
+  }, [article.image]);
 
   return (
     <motion.div
-      layout
-      key={article.id}
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-      className={`group relative rounded-2xl border border-white/80 bg-white p-2.5 sm:p-3 lg:p-3.5 flex flex-col justify-between hover:border-[#FF4E03] transition-all duration-300 shadow-xl hover:shadow-2xl overflow-hidden ${
-        isWide ? "md:col-span-2" : "col-span-1"
-      }`}
+      custom={direction}
+      variants={cardVariants}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      className="group relative rounded-2xl border border-white/20 hover:border-white/40 bg-white/10 hover:bg-white/15 backdrop-blur-md p-2.5 sm:p-3 lg:p-3.5 flex flex-col justify-between transition-colors duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.2)] overflow-hidden w-full h-full"
     >
+      {/* Top subtle specular glass reflection line */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+
       <Link
         href={article.link}
         className="flex flex-col justify-between h-full w-full"
         title={article.title}
       >
-        {/* UPPER SUBGRID AREA: COVERED BY CARD IMAGE (CLEAN, NO BLACK SHADE) */}
+        {/* UPPER SUBGRID AREA: COVERED BY CARD IMAGE */}
         <div
-          className={`relative w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-200/60 ${
+          className={`relative w-full rounded-xl overflow-hidden bg-black/25 border border-white/15 backdrop-blur-sm ${
             isWide
               ? "aspect-[22/9] sm:aspect-[24/9]"
               : "aspect-[16/10] sm:aspect-[16/10]"
           }`}
         >
           <Image
-            src={article.image}
+            src={imgSrc}
             alt={article.title}
             fill
+            unoptimized
+            onError={() => setImgSrc("/images/team-hero-opt.jpg")}
             sizes={
               isWide
                 ? "(max-width: 768px) 90vw, 680px"
@@ -75,39 +121,39 @@ function BentoCard({ article, slotIndex, isWide = false }: BentoCardProps) {
             className="object-cover object-center group-hover:scale-105 transition-transform duration-500 filter contrast-105"
           />
 
-          {/* Subtle light gradient at top for badge clarity (No black shade) */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+          {/* Gradient overlay for text/badge readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
           {/* Top category badge */}
-          <div className="absolute top-2 left-2 z-10 flex items-center gap-1.5">
-            <span className="bg-[#FF4E03] text-white font-redzone text-[8px] sm:text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md shadow-sm">
+          <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1.5">
+            <span className="bg-[#FF4E03]/90 hover:bg-[#FF4E03] text-white font-redzone text-[8px] sm:text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md shadow-sm border border-white/20 backdrop-blur-sm transition-colors">
               {article.category}
             </span>
           </div>
 
           {/* Top Right Arrow Indicator */}
-          <div className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 group-hover:bg-[#FF4E03] text-[#FF4E03] group-hover:text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-md">
+          <div className="absolute top-2.5 right-2.5 z-10 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 hover:bg-[#FF4E03] text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-md border border-white/30 backdrop-blur-sm">
             <ArrowUpRight className="w-3.5 h-3.5" />
           </div>
         </div>
 
-        {/* LOWER SUBGRID AREA: BLACK & ORANGE GRADIENT TEXTS */}
+        {/* LOWER SUBGRID AREA: METADATA & TEXTS */}
         <div className="pt-2 sm:pt-2.5 flex flex-col justify-end">
-          {/* Metadata with Orange Icon & Dark Text */}
-          <div className="flex items-center gap-1.5 mb-1 text-slate-500">
-            <IconComponent className="w-3.5 h-3.5 text-[#FF4E03] shrink-0" />
+          {/* Metadata with Gold Icon & Crisp Light Text */}
+          <div className="flex items-center gap-1.5 mb-1 text-white/80">
+            <IconComponent className="w-3.5 h-3.5 text-[#FFCB05] shrink-0" />
             <span className="font-forma text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider">
               {article.date} &bull; {article.readTime}
             </span>
           </div>
 
-          {/* Title: Orange Gradient or Deep Black with Orange Accent */}
-          <h3 className="font-redzone font-black text-xs sm:text-sm lg:text-base uppercase tracking-wide leading-snug line-clamp-1 bg-gradient-to-r from-[#D93800] via-[#FF4E03] to-[#FF6B00] bg-clip-text text-transparent group-hover:from-[#0A0E1A] group-hover:to-[#0A0E1A] transition-all duration-300">
+          {/* Title: High-contrast white text that shines gold on hover */}
+          <h3 className="font-redzone font-black text-xs sm:text-sm lg:text-base uppercase tracking-wide leading-snug line-clamp-1 text-white group-hover:text-[#FFCB05] transition-colors duration-200">
             {article.title}
           </h3>
 
-          {/* Subtitle / Excerpt: Clean Dark Black Text for high contrast */}
-          <p className="font-forma text-[11px] sm:text-xs text-slate-600 line-clamp-1 mt-0.5 leading-snug font-medium">
+          {/* Subtitle / Excerpt: Semi-transparent clean white for high legibility */}
+          <p className="font-forma text-[11px] sm:text-xs text-white/70 line-clamp-1 mt-0.5 leading-snug font-medium group-hover:text-white/90 transition-colors duration-200">
             {article.subtitle}
           </p>
         </div>
@@ -117,24 +163,83 @@ function BentoCard({ article, slotIndex, isWide = false }: BentoCardProps) {
 }
 
 export function NewsSection() {
-  const [startIndex, setStartIndex] = useState(0);
+  const [baseIndex, setBaseIndex] = useState(0);
+  const [activeArticles, setActiveArticles] = useState<NewsItem[]>([
+    getArticleAt(0),
+    getArticleAt(1),
+    getArticleAt(2),
+    getArticleAt(3)
+  ]);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
-  // Next: shifts 1 card out from the left and brings 1 new card in from the right
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(clearTimeout);
+    };
+  }, []);
+
+  // Next: Cascading sequential order
+  // 1st Grid 1 slides out -> Grid 2 takes place of Grid 1 -> Grid 3 takes place of Grid 2 -> Grid 4 takes place of Grid 3 -> New Grid slides into Grid 4
   const handleNext = () => {
-    setStartIndex((prev) => (prev + 1) % newsArticles.length);
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setDirection(1);
+
+    const nextBase = (baseIndex + 1) % newsArticles.length;
+    setBaseIndex(nextBase);
+
+    // Staggered sequence: 0ms, 80ms, 160ms, 240ms
+    const delays = [0, 80, 160, 240];
+
+    delays.forEach((delay, slot) => {
+      const t = setTimeout(() => {
+        setActiveArticles((prev) => {
+          const next = [...prev];
+          next[slot] = getArticleAt(nextBase + slot);
+          return next;
+        });
+      }, delay);
+      timeoutsRef.current.push(t);
+    });
+
+    // Reset animating lock after last slot completes
+    const endT = setTimeout(() => {
+      setIsAnimating(false);
+    }, 240 + 320);
+    timeoutsRef.current.push(endT);
   };
 
-  // Prev: shifts 1 card in from the left and brings 1 card out to the right
+  // Prev: Cascading reverse order
+  // 1st Grid 4 slides out -> Grid 3 takes place of Grid 4 -> Grid 2 takes place of Grid 3 -> Grid 1 takes place of Grid 2 -> New Grid slides into Grid 1
   const handlePrev = () => {
-    setStartIndex(
-      (prev) => (prev - 1 + newsArticles.length) % newsArticles.length
-    );
-  };
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setDirection(-1);
 
-  // 7 cards visible in the bento layout matching the attached image
-  const visibleArticles = Array.from({ length: 7 }, (_, i) => {
-    return newsArticles[(startIndex + i) % newsArticles.length];
-  });
+    const prevBase = (baseIndex - 1 + newsArticles.length) % newsArticles.length;
+    setBaseIndex(prevBase);
+
+    // Reverse stagger: Slot 3 (0ms) -> Slot 2 (80ms) -> Slot 1 (160ms) -> Slot 0 (240ms)
+    [3, 2, 1, 0].forEach((slot, i) => {
+      const delay = i * 80;
+      const t = setTimeout(() => {
+        setActiveArticles((prev) => {
+          const next = [...prev];
+          next[slot] = getArticleAt(prevBase + slot);
+          return next;
+        });
+      }, delay);
+      timeoutsRef.current.push(t);
+    });
+
+    const endT = setTimeout(() => {
+      setIsAnimating(false);
+    }, 240 + 320);
+    timeoutsRef.current.push(endT);
+  };
 
   return (
     <section
@@ -176,7 +281,7 @@ export function NewsSection() {
 
       {/* MAIN CONTAINER: TAKES AT LEAST 70% OF SECTION WIDTH */}
       <div className="relative z-10 w-full max-w-[92vw] lg:w-[74%] xl:w-[72%] mx-auto px-2 sm:px-4 flex flex-col justify-between">
-        {/* TOP HEADER: Centered Title + Prev/Next Controls (No black borders or black shade) */}
+        {/* TOP HEADER: Centered Title + Prev/Next Controls with Semi-Transparent Glass Styling */}
         <div className="relative flex flex-col items-center text-center pb-5 sm:pb-6">
           <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
@@ -189,12 +294,13 @@ export function NewsSection() {
             NEWS &amp; ARTICLES
           </h2>
 
-          {/* PREV / NEXT BUTTONS: White/Orange Styling (No black shade) */}
+          {/* PREV / NEXT BUTTONS: Semi-transparent Frosted Glass Styling */}
           <div className="mt-3.5 sm:mt-0 sm:absolute sm:right-0 sm:bottom-1 flex items-center gap-2">
             <button
               onClick={handlePrev}
+              disabled={isAnimating}
               aria-label="Previous article"
-              className="px-3.5 py-1.5 rounded-lg bg-white/95 hover:bg-white text-[#D93800] hover:text-[#0A0E1A] border border-white/60 font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg"
+              className="px-3.5 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 active:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed text-white border border-white/30 hover:border-white/50 backdrop-blur-md font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>PREV</span>
@@ -202,8 +308,9 @@ export function NewsSection() {
 
             <button
               onClick={handleNext}
+              disabled={isAnimating}
               aria-label="Next article"
-              className="px-3.5 py-1.5 rounded-lg bg-white/95 hover:bg-white text-[#D93800] hover:text-[#0A0E1A] border border-white/60 font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg"
+              className="px-3.5 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 active:bg-white/30 disabled:opacity-40 disabled:cursor-not-allowed text-white border border-white/30 hover:border-white/50 backdrop-blur-md font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg"
             >
               <span>NEXT</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -211,62 +318,64 @@ export function NewsSection() {
           </div>
         </div>
 
-        {/* BENTO GRID CONTAINER MATCHING EXACT ATTACHED IMAGE:
-            Row 1: 3 cards (1-col each)
-            Row 2: 2 cards (Left 2-col wide + Right 1-col)
-            Row 3: 2 cards (Left 1-col + Right 2-col wide)
+        {/* BENTO GRID CONTAINER:
+            Row 1: 2 cards (Left 2-col wide + Right 1-col)
+            Row 2: 2 cards (Left 1-col + Right 2-col wide)
+            Each grid slot has fixed dimensions, with overflow-hidden for silky-smooth slide transitions.
         */}
         <div className="pt-3 sm:pt-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-3 lg:gap-3.5 w-full">
-            <AnimatePresence mode="popLayout">
-              {/* Row 1: 3 cards */}
-              <BentoCard
-                key={visibleArticles[0].id}
-                article={visibleArticles[0]}
-                slotIndex={0}
-                isWide={false}
-              />
-              <BentoCard
-                key={visibleArticles[1].id}
-                article={visibleArticles[1]}
-                slotIndex={1}
-                isWide={false}
-              />
-              <BentoCard
-                key={visibleArticles[2].id}
-                article={visibleArticles[2]}
-                slotIndex={2}
-                isWide={false}
-              />
+            {/* Grid 1: Slot 0 (Left 2-col wide) */}
+            <div className="md:col-span-2 relative overflow-hidden rounded-2xl">
+              <AnimatePresence mode="wait" custom={direction}>
+                <BentoCard
+                  key={activeArticles[0].id}
+                  article={activeArticles[0]}
+                  slotIndex={0}
+                  isWide={true}
+                  direction={direction}
+                />
+              </AnimatePresence>
+            </div>
 
-              {/* Row 2: 2 cards (Left 2-col wide + Right 1-col) */}
-              <BentoCard
-                key={visibleArticles[3].id}
-                article={visibleArticles[3]}
-                slotIndex={3}
-                isWide={true}
-              />
-              <BentoCard
-                key={visibleArticles[4].id}
-                article={visibleArticles[4]}
-                slotIndex={4}
-                isWide={false}
-              />
+            {/* Grid 2: Slot 1 (Right 1-col) */}
+            <div className="col-span-1 relative overflow-hidden rounded-2xl">
+              <AnimatePresence mode="wait" custom={direction}>
+                <BentoCard
+                  key={activeArticles[1].id}
+                  article={activeArticles[1]}
+                  slotIndex={1}
+                  isWide={false}
+                  direction={direction}
+                />
+              </AnimatePresence>
+            </div>
 
-              {/* Row 3: 2 cards (Left 1-col + Right 2-col wide) */}
-              <BentoCard
-                key={visibleArticles[5].id}
-                article={visibleArticles[5]}
-                slotIndex={5}
-                isWide={false}
-              />
-              <BentoCard
-                key={visibleArticles[6].id}
-                article={visibleArticles[6]}
-                slotIndex={6}
-                isWide={true}
-              />
-            </AnimatePresence>
+            {/* Grid 3: Slot 2 (Left 1-col) */}
+            <div className="col-span-1 relative overflow-hidden rounded-2xl">
+              <AnimatePresence mode="wait" custom={direction}>
+                <BentoCard
+                  key={activeArticles[2].id}
+                  article={activeArticles[2]}
+                  slotIndex={2}
+                  isWide={false}
+                  direction={direction}
+                />
+              </AnimatePresence>
+            </div>
+
+            {/* Grid 4: Slot 3 (Right 2-col wide) */}
+            <div className="md:col-span-2 relative overflow-hidden rounded-2xl">
+              <AnimatePresence mode="wait" custom={direction}>
+                <BentoCard
+                  key={activeArticles[3].id}
+                  article={activeArticles[3]}
+                  slotIndex={3}
+                  isWide={true}
+                  direction={direction}
+                />
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

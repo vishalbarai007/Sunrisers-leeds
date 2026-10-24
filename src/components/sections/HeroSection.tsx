@@ -58,7 +58,7 @@ export function HeroSection() {
         scrollTrigger: {
           trigger: heroRef.current,
           start: "top top",
-          end: "+=160px",
+          end: () => `+=${Math.round(Math.max(window.innerHeight * 0.85, 750))}`,
           scrub: 0.6,
           pin: true,
           anticipatePin: 1,
@@ -75,16 +75,25 @@ export function HeroSection() {
         }
       });
 
-      // 1. Center LEEDS scales up with fade effect, fading away as it enlarges
+      // 1. Center LEEDS scales up with depth, staying solid initially and disappearing after 80vh+ of scroll
       if (centerTextRef.current) {
         tl.to(
           centerTextRef.current,
           {
-            scale: 8,
-            opacity: 0,
-            ease: "power2.inOut"
+            scale: 7,
+            ease: "power2.in",
+            duration: 1
           },
           0
+        );
+        tl.to(
+          centerTextRef.current,
+          {
+            opacity: 0,
+            ease: "power1.in",
+            duration: 0.75
+          },
+          0.25
         );
       }
 
@@ -95,7 +104,8 @@ export function HeroSection() {
           {
             scale: 1.15,
             opacity: 0.25,
-            ease: "none"
+            ease: "none",
+            duration: 1
           },
           0
         );
@@ -108,7 +118,8 @@ export function HeroSection() {
           {
             x: -400,
             opacity: 0,
-            ease: "power2.in"
+            ease: "power2.in",
+            duration: 0.5
           },
           0
         );
@@ -121,7 +132,8 @@ export function HeroSection() {
           {
             x: 400,
             opacity: 0,
-            ease: "power2.in"
+            ease: "power2.in",
+            duration: 0.5
           },
           0
         );
@@ -135,7 +147,8 @@ export function HeroSection() {
             y: 180,
             x: -150,
             opacity: 0,
-            ease: "power2.in"
+            ease: "power2.in",
+            duration: 0.5
           },
           0
         );
@@ -148,7 +161,8 @@ export function HeroSection() {
             y: 180,
             x: 150,
             opacity: 0,
-            ease: "power2.in"
+            ease: "power2.in",
+            duration: 0.5
           },
           0
         );
@@ -161,7 +175,8 @@ export function HeroSection() {
           {
             opacity: 0,
             y: 60,
-            ease: "power1.in"
+            ease: "power1.in",
+            duration: 0.3
           },
           0
         );

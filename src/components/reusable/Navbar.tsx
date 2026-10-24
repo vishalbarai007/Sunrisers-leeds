@@ -20,9 +20,10 @@ export function Navbar() {
       setIsScrolled(customEvent.detail.isPastHero);
     };
 
-    // 2. Direct scroll check: only active after hero is completely scrolled past (~150px-160px)
+    // 2. Direct scroll check: active only after hero section is scrolled past (>= 80vh)
     const handleScroll = () => {
-      if (window.scrollY > 150) {
+      const heroThreshold = window.innerHeight * 0.8;
+      if (window.scrollY > heroThreshold) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
