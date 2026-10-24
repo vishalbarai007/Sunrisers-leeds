@@ -42,11 +42,11 @@ function BentoCard({ article, slotIndex, isWide = false }: BentoCardProps) {
     <motion.div
       layout
       key={article.id}
-      initial={{ opacity: 0, scale: 0.95 }}
+      initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
+      exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
-      className={`group relative rounded-2xl border border-white/15 bg-[#0B0E17]/90 backdrop-blur-md p-2.5 sm:p-3 lg:p-3.5 flex flex-col justify-between hover:border-[#FF4E03]/60 transition-all duration-300 shadow-xl overflow-hidden ${
+      className={`group relative rounded-2xl border border-white/80 bg-white p-2.5 sm:p-3 lg:p-3.5 flex flex-col justify-between hover:border-[#FF4E03] transition-all duration-300 shadow-xl hover:shadow-2xl overflow-hidden ${
         isWide ? "md:col-span-2" : "col-span-1"
       }`}
     >
@@ -55,11 +55,11 @@ function BentoCard({ article, slotIndex, isWide = false }: BentoCardProps) {
         className="flex flex-col justify-between h-full w-full"
         title={article.title}
       >
-        {/* UPPER SUBGRID AREA: COVERED BY CARD IMAGE */}
+        {/* UPPER SUBGRID AREA: COVERED BY CARD IMAGE (CLEAN, NO BLACK SHADE) */}
         <div
-          className={`relative w-full rounded-xl overflow-hidden bg-black/40 border border-white/10 ${
+          className={`relative w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-200/60 ${
             isWide
-              ? "aspect-[21/9] sm:aspect-[22/9]"
+              ? "aspect-[22/9] sm:aspect-[24/9]"
               : "aspect-[16/10] sm:aspect-[16/10]"
           }`}
         >
@@ -75,36 +75,39 @@ function BentoCard({ article, slotIndex, isWide = false }: BentoCardProps) {
             className="object-cover object-center group-hover:scale-105 transition-transform duration-500 filter contrast-105"
           />
 
-          {/* Vignette gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent pointer-events-none" />
+          {/* Subtle light gradient at top for badge clarity (No black shade) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
 
           {/* Top category badge */}
           <div className="absolute top-2 left-2 z-10 flex items-center gap-1.5">
-            <span className="bg-[#070A12]/80 backdrop-blur-md text-white font-redzone text-[8px] sm:text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border border-white/15">
+            <span className="bg-[#FF4E03] text-white font-redzone text-[8px] sm:text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md shadow-sm">
               {article.category}
             </span>
           </div>
 
           {/* Top Right Arrow Indicator */}
-          <div className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/10 group-hover:bg-[#FF4E03] text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg">
+          <div className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 group-hover:bg-[#FF4E03] text-[#FF4E03] group-hover:text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-md">
             <ArrowUpRight className="w-3.5 h-3.5" />
           </div>
         </div>
 
-        {/* LOWER SUBGRID AREA: ICON + TITLE + SUBTITLE / DESCRIPTION */}
+        {/* LOWER SUBGRID AREA: BLACK & ORANGE GRADIENT TEXTS */}
         <div className="pt-2 sm:pt-2.5 flex flex-col justify-end">
-          <div className="flex items-center gap-1.5 mb-1 text-white/60">
+          {/* Metadata with Orange Icon & Dark Text */}
+          <div className="flex items-center gap-1.5 mb-1 text-slate-500">
             <IconComponent className="w-3.5 h-3.5 text-[#FF4E03] shrink-0" />
             <span className="font-forma text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider">
               {article.date} &bull; {article.readTime}
             </span>
           </div>
 
-          <h3 className="font-redzone font-black text-xs sm:text-sm lg:text-base text-white uppercase tracking-wide group-hover:text-[#FF4E03] transition-colors duration-200 line-clamp-1 leading-tight">
+          {/* Title: Orange Gradient or Deep Black with Orange Accent */}
+          <h3 className="font-redzone font-black text-xs sm:text-sm lg:text-base uppercase tracking-wide leading-snug line-clamp-1 bg-gradient-to-r from-[#D93800] via-[#FF4E03] to-[#FF6B00] bg-clip-text text-transparent group-hover:from-[#0A0E1A] group-hover:to-[#0A0E1A] transition-all duration-300">
             {article.title}
           </h3>
 
-          <p className="font-forma text-[11px] sm:text-xs text-white/70 line-clamp-1 mt-0.5 leading-snug">
+          {/* Subtitle / Excerpt: Clean Dark Black Text for high contrast */}
+          <p className="font-forma text-[11px] sm:text-xs text-slate-600 line-clamp-1 mt-0.5 leading-snug font-medium">
             {article.subtitle}
           </p>
         </div>
@@ -136,7 +139,7 @@ export function NewsSection() {
   return (
     <section
       id="news"
-      className="relative w-full min-h-[70vh] py-12 lg:py-16 bg-gradient-to-br from-[#D93800] via-[#F4570B] to-[#C92F00] text-white overflow-hidden select-none border-t border-white/15 flex flex-col justify-center"
+      className="relative w-full min-h-[70vh] py-12 lg:py-16 bg-gradient-to-br from-[#D93800] via-[#F4570B] to-[#C92F00] text-white overflow-hidden select-none flex flex-col justify-center"
     >
       {/* Subtle Architectural Grid Lines */}
       <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-8 pointer-events-none z-0">
@@ -173,8 +176,8 @@ export function NewsSection() {
 
       {/* MAIN CONTAINER: TAKES AT LEAST 70% OF SECTION WIDTH */}
       <div className="relative z-10 w-full max-w-[92vw] lg:w-[74%] xl:w-[72%] mx-auto px-2 sm:px-4 flex flex-col justify-between">
-        {/* TOP HEADER: Centered Title + Prev/Next Controls matching site button font rules */}
-        <div className="relative flex flex-col items-center text-center pb-5 sm:pb-6 border-b border-white/20">
+        {/* TOP HEADER: Centered Title + Prev/Next Controls (No black borders or black shade) */}
+        <div className="relative flex flex-col items-center text-center pb-5 sm:pb-6">
           <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
             <span className="font-redzone text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-white/90">
@@ -186,12 +189,12 @@ export function NewsSection() {
             NEWS &amp; ARTICLES
           </h2>
 
-          {/* PREV / NEXT BUTTONS (Following site font rules: font-redzone) */}
-          <div className="mt-3.5 sm:mt-0 sm:absolute sm:right-0 sm:bottom-5 sm:translate-y-1/2 flex items-center gap-2">
+          {/* PREV / NEXT BUTTONS: White/Orange Styling (No black shade) */}
+          <div className="mt-3.5 sm:mt-0 sm:absolute sm:right-0 sm:bottom-1 flex items-center gap-2">
             <button
               onClick={handlePrev}
               aria-label="Previous article"
-              className="px-3.5 py-1.5 rounded-lg bg-[#070A12]/80 hover:bg-[#FF4E03] text-white border border-white/20 font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg hover:border-white/40"
+              className="px-3.5 py-1.5 rounded-lg bg-white/95 hover:bg-white text-[#D93800] hover:text-[#0A0E1A] border border-white/60 font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>PREV</span>
@@ -200,7 +203,7 @@ export function NewsSection() {
             <button
               onClick={handleNext}
               aria-label="Next article"
-              className="px-3.5 py-1.5 rounded-lg bg-[#070A12]/80 hover:bg-[#FF4E03] text-white border border-white/20 font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg hover:border-white/40"
+              className="px-3.5 py-1.5 rounded-lg bg-white/95 hover:bg-white text-[#D93800] hover:text-[#0A0E1A] border border-white/60 font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg"
             >
               <span>NEXT</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -213,7 +216,7 @@ export function NewsSection() {
             Row 2: 2 cards (Left 2-col wide + Right 1-col)
             Row 3: 2 cards (Left 1-col + Right 2-col wide)
         */}
-        <div className="pt-5 sm:pt-6">
+        <div className="pt-3 sm:pt-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-3 lg:gap-3.5 w-full">
             <AnimatePresence mode="popLayout">
               {/* Row 1: 3 cards */}
@@ -251,7 +254,18 @@ export function NewsSection() {
               />
 
               {/* Row 3: 2 cards (Left 1-col + Right 2-col wide) */}
-             
+              <BentoCard
+                key={visibleArticles[5].id}
+                article={visibleArticles[5]}
+                slotIndex={5}
+                isWide={false}
+              />
+              <BentoCard
+                key={visibleArticles[6].id}
+                article={visibleArticles[6]}
+                slotIndex={6}
+                isWide={true}
+              />
             </AnimatePresence>
           </div>
         </div>

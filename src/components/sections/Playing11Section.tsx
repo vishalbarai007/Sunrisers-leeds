@@ -158,8 +158,8 @@ export function Playing11Section() {
                 }}
               />
 
-              {/* TOP HEADER BAR */}
-              <div className="relative z-10 w-full px-8 lg:px-14 xl:px-20 pt-6 lg:pt-8 flex items-center justify-between border-b border-current/10">
+              {/* TOP HEADER BAR (Clean, no black lines) */}
+              <div className="relative z-10 w-full px-8 lg:px-14 xl:px-20 pt-6 lg:pt-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <span
                     className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] lg:text-xs font-redzone font-bold uppercase tracking-wider ${
@@ -284,19 +284,19 @@ export function Playing11Section() {
                 })}
               </div>
 
-              {/* BOTTOM FOOTER BAR */}
-              <div className="relative z-10 w-full px-8 lg:px-14 xl:px-20 pb-5 flex items-center justify-between border-t border-current/10">
+              {/* BOTTOM FOOTER BAR (Clean, no black lines) */}
+              <div className="relative z-10 w-full px-8 lg:px-14 xl:px-20 pb-5 flex items-center justify-between">
                 <span
                   className={`font-redzone text-xs font-black uppercase tracking-wider ${
-                    isWhite ? "text-[#0A0E1A]/50" : "text-white/50"
+                    isWhite ? "text-[#0A0E1A]/60" : "text-white/60"
                   }`}
                 >
                   SUNRISERS LEEDS &bull; MATCHDAY PLAYING 11
                 </span>
 
                 <span
-                  className={`font-forma text-xs font-semibold ${
-                    isWhite ? "text-slate-500" : "text-white/60"
+                  className={`font-forma text-xs font-semibold pr-32 ${
+                    isWhite ? "text-slate-500" : "text-white/70"
                   }`}
                 >
                   SCROLL TO EXPLORE SQUAD

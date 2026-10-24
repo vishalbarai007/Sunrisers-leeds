@@ -149,8 +149,8 @@ export function MilestoneSection() {
                   />
                 )}
 
-                {/* TOP HEADER / BADGE BAR */}
-                <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-20 pt-4 sm:pt-6 lg:pt-8 flex items-center justify-between border-b border-current/10">
+                {/* TOP HEADER / BADGE BAR (No black line) */}
+                <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-20 pt-4 sm:pt-6 lg:pt-8 flex items-center justify-between">
                   <div className="flex items-center gap-2 sm:gap-3">
                     <span
                       className={`inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[11px] font-redzone font-bold uppercase tracking-wider ${
@@ -253,7 +253,7 @@ export function MilestoneSection() {
                       {item.description}
                     </p>
 
-                    <div className="mt-2.5 pt-2.5 lg:mt-4 lg:pt-4 border-t border-current/15 flex items-center gap-2 sm:gap-3">
+                    <div className={`mt-2.5 pt-2.5 lg:mt-4 lg:pt-4 border-t ${slideIsWhite ? "border-slate-200" : "border-white/20"} flex items-center gap-2 sm:gap-3`}>
                       <Award
                         className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${
                           slideIsWhite ? "text-[#FF4E03]" : "text-white"
