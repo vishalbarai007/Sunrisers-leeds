@@ -35,7 +35,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative w-full min-h-[100svh] bg-[#FFFFFF] text-[#0A0E1A] flex items-center justify-center py-16 sm:py-24 px-4 sm:px-8 md:px-12 lg:px-20 overflow-hidden select-none border-t border-slate-200 z-10"
+      className="relative w-full min-h-[70svh] bg-[#FFFFFF] text-[#0A0E1A] flex items-center justify-center py-16 sm:py-24 px-4 sm:px-8 md:px-12 lg:px-20 overflow-hidden select-none border-t border-slate-200 z-10"
     >
       {/* Subtle 8-Column Architectural Grid Lines (matching website sections) */}
       <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-8 pointer-events-none z-0">
@@ -134,7 +134,7 @@ export function ContactSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-[1280px] min-h-[540px] sm:min-h-[640px] lg:min-h-[680px] rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#E64200]/60 via-[#FF5500]/45 to-[#C92F00]/55 backdrop-blur-2xl backdrop-saturate-150 border border-white/35 shadow-[0_30px_90px_-15px_rgba(230,66,0,0.35),inset_0_1px_2px_rgba(255,255,255,0.4)] p-6 sm:p-12 md:p-16 lg:p-20 text-white flex flex-col justify-center overflow-hidden"
+        className="relative z-10 w-full max-w-[1280px] min-h-[540px] sm:min-h-[640px] lg:min-h-[680px] rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#E64200] via-[#FF5500] to-[#C92F00] backdrop-blur-2xl backdrop-saturate-150 border border-white/35 shadow-[0_30px_90px_-15px_rgba(230,66,0,0.35),inset_0_1px_2px_rgba(255,255,255,0.4)] p-6 sm:p-12 md:p-16 lg:p-20 text-white flex flex-col justify-center overflow-hidden"
       >
         {/* Top specular reflection for glass finish */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />

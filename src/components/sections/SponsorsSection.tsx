@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronsRight, Sparkles } from "lucide-react";
 import { CricketBall3D } from "@/components/3d/CricketBall3D";
 import { LEFT_SPONSORS, RIGHT_SPONSORS, SponsorItem } from "@/data/sponsors";
-import { SponsorLogo } from "./SponsorLogos";
+import { SponsorLogo, Dream11Logo, EmiratesLogo } from "./SponsorLogos";
 
 function SponsorCard({ item }: { item: SponsorItem }) {
   return (
@@ -102,15 +102,41 @@ export function SponsorsSection() {
           {/* ============================================================== */}
           {/* COLUMN 2: CENTER PINNED 3D CRICKET BALL & HEADLINE             */}
           {/* ============================================================== */}
-          <div className="flex-1 flex flex-col items-center justify-between h-full pt-20 pb-4 sm:pt-24 sm:pb-6 md:pt-24 md:pb-8 lg:py-10 px-4 relative min-h-0">
+          <div className="flex-1 flex flex-col items-center justify-between h-full pt-16 pb-4 sm:pt-20 sm:pb-6 md:pt-20 md:pb-6 lg:py-8 px-4 relative min-h-0">
             {/* Top Headline (Yellow/Orange gradient matching Nick Ho reference) */}
-            <div className="flex flex-col items-center text-center z-20">
+            <div className="flex flex-col items-center text-center z-20 w-full max-w-lg">
               <span className="font-redzone text-[10px] sm:text-xs font-bold tracking-[0.24em] sm:tracking-[0.28em] text-[#FF4B03] uppercase mb-1">
                 GLOBAL COMMERCIAL PARTNERS
               </span>
               <h2 className="font-redzone text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FFCB05] via-[#FF8800] to-[#E64200]">
                 MORE FOCUSED, MORE COMPLETE.
               </h2>
+
+              {/* 2 TITLE SPONSORS BELOW TITLE IN COL-2 */}
+              <div className="mt-3.5 sm:mt-4 w-full max-w-sm sm:max-w-md flex flex-col items-center">
+
+                <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5 w-full">
+                  {/* Title Sponsor 1: DREAM11 */}
+                  <div className="flex flex-col items-center justify-center py-2.5 px-3 rounded-xl border border-slate-200/90 bg-white shadow-md hover:shadow-xl hover:border-[#FF4B03]/40 transition-all duration-300 group">
+                    <div className="h-7 sm:h-8 flex items-center justify-center text-slate-800 group-hover:scale-105 transition-transform">
+                      <Dream11Logo className="h-6 sm:h-7 w-auto" />
+                    </div>
+                    <span className="font-redzone text-[8px] sm:text-[9px] font-black text-[#FF4B03] tracking-wider uppercase mt-1">
+                      PRINCIPAL TITLE SPONSOR
+                    </span>
+                  </div>
+
+                  {/* Title Sponsor 2: EMIRATES */}
+                  <div className="flex flex-col items-center justify-center py-2.5 px-3 rounded-xl border border-slate-200/90 bg-white shadow-md hover:shadow-xl hover:border-[#FF4B03]/40 transition-all duration-300 group">
+                    <div className="h-7 sm:h-8 flex items-center justify-center text-slate-800 group-hover:scale-105 transition-transform">
+                      <EmiratesLogo className="h-6 sm:h-7 w-auto" />
+                    </div>
+                    <span className="font-redzone text-[8px] sm:text-[9px] font-black text-[#FF4B03] tracking-wider uppercase mt-1">
+                      GLOBAL AIRLINE PARTNER
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* 3D Red Season Cricket Ball (Rotates around its axis on scroll) */}
