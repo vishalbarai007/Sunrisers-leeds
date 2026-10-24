@@ -307,9 +307,9 @@ export function HeroSection() {
         {/* Bottom-Right Corner: Next Fixture Card with Live Ticking Countdown */}
         <div
           ref={bottomRightRef}
-          className="w-full max-w-[300px] sm:max-w-[270px] md:max-w-xs lg:max-w-sm text-center sm:text-left sm:ml-auto pointer-events-auto"
+          className="w-full max-w-[300px] sm:max-w-[270px] md:max-w-xs lg:max-w-sm text-center sm:text-right sm:ml-auto pointer-events-auto"
         >
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-2.5 text-[9px] sm:text-[11px] font-forma font-bold text-slate-500 uppercase tracking-widest">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 sm:gap-2.5 text-[9px] sm:text-[11px] font-forma font-bold text-slate-500 uppercase tracking-widest">
             {heroData.partners.map((partner, i) => (
               <span key={partner} className="flex items-center gap-2 sm:gap-2.5">
                 <span className="hover:text-slate-300 transition-colors">{partner}</span>
