@@ -73,20 +73,20 @@ export function Navbar() {
             : "bg-transparent border-b border-transparent h-20 sm:h-24"
         }`}
       >
-        <div className="relative w-full h-full px-6 sm:px-10 lg:px-16 flex items-center justify-between">
+        <div className="relative w-full h-full px-4 sm:px-8 md:px-10 lg:px-16 flex items-center justify-between">
           {/* 1. Leftmost Item: Hamburger Menu Button (copying reference newhum-one / nickho-motorsports) */}
           <div className="flex-1 flex items-center justify-start z-10">
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
               aria-label="Open Navigation Menu"
-              className="group flex items-center gap-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded py-2 pr-3 cursor-pointer select-none transition-transform active:scale-95"
+              className="group flex items-center gap-2 sm:gap-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded py-2 pr-2 sm:pr-3 cursor-pointer select-none transition-transform active:scale-95"
             >
-              <div className="flex flex-col justify-center gap-1.5 w-6 h-5">
-                <span className="block h-[2.5px] bg-white rounded-full transition-all duration-300 w-6 group-hover:w-4" />
-                <span className="block h-[2.5px] bg-white rounded-full transition-all duration-300 w-4 group-hover:w-6" />
+              <div className="flex flex-col justify-center gap-1.5 w-5 sm:w-6 h-5">
+                <span className="block h-[2.5px] bg-white rounded-full transition-all duration-300 w-5 sm:w-6 group-hover:w-4" />
+                <span className="block h-[2.5px] bg-white rounded-full transition-all duration-300 w-3.5 sm:w-4 group-hover:w-5 sm:group-hover:w-6" />
               </div>
-              <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.24em] transition-colors duration-200 text-white group-hover:text-white/80 font-forma">
+              <span className="text-[11px] sm:text-sm font-bold uppercase tracking-[0.2em] sm:tracking-[0.24em] transition-colors duration-200 text-white group-hover:text-white/80 font-redzone">
                 Menu
               </span>
             </button>
@@ -112,8 +112,8 @@ export function Navbar() {
               <div
                 className={`transition-all duration-500 ease-out flex items-center justify-center ${
                   isScrolled
-                    ? "w-[125px] sm:w-[150px] md:w-[170px] drop-shadow-[0_8px_16px_rgba(0,0,0,0.45)] group-hover:scale-105"
-                    : "w-[110px] sm:w-[135px] md:w-[155px] drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)] group-hover:scale-105"
+                    ? "w-[105px] sm:w-[140px] md:w-[160px] lg:w-[170px] drop-shadow-[0_8px_16px_rgba(0,0,0,0.45)] group-hover:scale-105"
+                    : "w-[96px] sm:w-[130px] md:w-[145px] lg:w-[155px] drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)] group-hover:scale-105"
                 }`}
               >
                 <Image
@@ -132,7 +132,7 @@ export function Navbar() {
           <div className="flex-1 flex items-center justify-end z-10">
             <Link
               href="#contact"
-              className="relative text-xs sm:text-sm font-bold uppercase tracking-[0.24em] transition-colors duration-200 text-white hover:text-white/85 py-1.5 group font-forma"
+              className="relative text-[11px] sm:text-sm font-bold uppercase tracking-[0.2em] sm:tracking-[0.24em] transition-colors duration-200 text-white hover:text-white/85 py-1.5 group font-redzone"
             >
               <span>Contact</span>
               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full" />
@@ -153,7 +153,7 @@ export function Navbar() {
       */}
       <div
         id="fullscreen-menu-overlay"
-        className={`fixed inset-0 z-[100] w-screen h-screen bg-gradient-to-br from-[#FF4E03] via-[#FF6200] to-[#CF2E00] fullscreen-menu-tile ${
+        className={`fixed inset-0 z-[100] w-screen h-[100dvh] lg:h-screen bg-gradient-to-br from-[#FF4E03] via-[#FF6200] to-[#CF2E00] fullscreen-menu-tile ${
           menuOpen ? "is-active pointer-events-auto" : "pointer-events-none"
         }`}
         data-navigation-status={menuOpen ? "active" : "not-active"}
@@ -170,8 +170,19 @@ export function Navbar() {
           <div className="hidden md:block h-full" />
         </div>
 
+        {/* Consistent geometric dots watermark (36px x 36px) across orange backgrounds */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.035] mix-blend-overlay z-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(#000 1.2px, transparent 1.2px), radial-gradient(#000 1.2px, #FFFFFF 1.2px)",
+            backgroundSize: "36px 36px",
+            backgroundPosition: "0 0, 18px 18px"
+          }}
+        />
+
         {/* Content Container */}
-        <div className="relative z-10 w-full h-full flex flex-col justify-between p-6 sm:p-10 md:p-14 overflow-y-auto">
+        <div className="relative z-10 w-full h-full flex flex-col justify-between p-5 sm:p-8 md:p-12 lg:p-14 overflow-y-auto">
           {/* Top Bar inside Menu */}
           <div className="w-full flex items-center justify-between">
             {/* Original Full-Color Brand Logo inside Menu (Left) */}
@@ -180,7 +191,7 @@ export function Navbar() {
               onClick={() => setMenuOpen(false)}
               className="flex items-center gap-3.5 group cursor-pointer"
             >
-              <div className="w-12 sm:w-14 h-auto flex items-center justify-center drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform">
+              <div className="w-11 sm:w-14 h-auto flex items-center justify-center drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform">
                 <Image
                   src="/images/logo.svg"
                   alt="Sunrisers Leeds"
@@ -190,7 +201,7 @@ export function Navbar() {
                   className="w-full h-auto object-contain"
                 />
               </div>
-              <span className="font-heading text-lg sm:text-2xl font-black text-white uppercase tracking-wider hidden sm:inline leading-none drop-shadow-sm">
+              <span className="font-redzone text-lg sm:text-2xl font-black text-white uppercase tracking-wider hidden sm:inline leading-none drop-shadow-sm">
                 SUNRISERS LEEDS
               </span>
             </Link>
@@ -200,9 +211,9 @@ export function Navbar() {
               id="menu-close-btn"
               onClick={() => setMenuOpen(false)}
               aria-label="Close menu"
-              className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-black/40 hover:bg-black/70 border border-white/25 text-white flex items-center justify-center cursor-pointer transition-all duration-300 shadow-xl group active:scale-95"
+              className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-black/40 hover:bg-black/70 border border-white/25 text-white flex items-center justify-center cursor-pointer transition-all duration-300 shadow-xl group active:scale-95"
             >
-              <X className="w-6 h-6 text-white transition-transform duration-500 group-hover:rotate-90" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6 text-white transition-transform duration-500 group-hover:rotate-90" />
             </button>
           </div>
 
@@ -213,8 +224,8 @@ export function Navbar() {
             - Staggered animated reveal
             - Dimming on hover: all sibling items fade to 20% opacity while hovered item is 100% white
           */}
-          <div className="my-auto py-8 sm:py-10 flex flex-col items-center justify-center text-center w-full">
-            <ul className="menu-nav-list flex flex-col items-center justify-center gap-1.5 sm:gap-2.5 md:gap-3.5 w-full">
+          <div className="my-auto py-4 sm:py-8 lg:py-10 flex flex-col items-center justify-center text-center w-full">
+            <ul className="menu-nav-list flex flex-col items-center justify-center gap-1 sm:gap-2 md:gap-3 lg:gap-3.5 w-full">
               {mainNavItems.map((item, idx) => (
                 <li
                   key={item.label}
@@ -226,7 +237,7 @@ export function Navbar() {
                     <Link
                       href={item.href}
                       onClick={() => setMenuOpen(false)}
-                      className="group relative inline-flex items-center justify-center font-redzone text-3xl sm:text-5xl md:text-6xl lg:text-[68px] font-black uppercase text-white tracking-tight leading-[1.05] select-none py-1 transition-transform drop-shadow-[0_4px_16px_rgba(0,0,0,0.25)]"
+                      className="group relative inline-flex items-center justify-center font-redzone text-2xl sm:text-4xl md:text-5xl lg:text-[68px] font-black uppercase text-white tracking-tight leading-[1.05] select-none py-0.5 sm:py-1 transition-transform drop-shadow-[0_4px_16px_rgba(0,0,0,0.25)]"
                     >
                       {/* Dual text roll hover effect */}
                       <div className="relative h-[1.1em] overflow-hidden">

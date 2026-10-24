@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { mainNavItems, footerNavItems } from "@/data/navigation";
 import { siteConfig } from "@/data/siteConfig";
 import { toast } from "sonner";
@@ -46,13 +47,24 @@ export function Footer() {
         <div className="hidden md:block h-full" />
       </div>
 
+      {/* Consistent geometric dots watermark (36px x 36px) across orange backgrounds */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035] mix-blend-overlay z-0"
+        style={{
+          backgroundImage:
+            "radial-gradient(#000 1.2px, transparent 1.2px), radial-gradient(#000 1.2px, #FFFFFF 1.2px)",
+          backgroundSize: "36px 36px",
+          backgroundPosition: "0 0, 18px 18px"
+        }}
+      />
+
       <div className="relative z-10 w-full px-6 sm:px-10 md:px-14 lg:px-20">
         {/* Top 3-Column Content Layout (modeled after https://newhum-one.vercel.app/) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 pb-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 pb-14">
           {/* Column 1 (Left): Club Mission, Address, Email, and Social Medias */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="md:col-span-2 lg:col-span-5 space-y-6">
             <div>
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black uppercase text-white tracking-tight leading-[1.08] mb-3">
+              <h2 className="font-redzone text-3xl sm:text-4xl lg:text-5xl font-black uppercase text-white tracking-wider leading-[1.08] mb-3">
                 Experience Championship Passion
               </h2>
               <p className="font-forma text-sm sm:text-base text-white/85 leading-relaxed max-w-xl">
@@ -124,7 +136,7 @@ export function Footer() {
           </div>
 
           {/* Column 2 (Center): Navigation Links */}
-          <div className="lg:col-span-3 lg:pl-8">
+          <div className="md:col-span-1 lg:col-span-3 lg:pl-8">
             <span className="font-forma text-xs uppercase font-bold tracking-[0.25em] text-white/80 block mb-5">
               Navigation
             </span>
@@ -151,7 +163,7 @@ export function Footer() {
           </div>
 
           {/* Column 3 (Right): Newsletter Subscription Option */}
-          <div className="lg:col-span-4">
+          <div className="md:col-span-1 lg:col-span-4">
             <span className="font-forma text-xs uppercase font-bold tracking-[0.25em] text-white/80 block mb-5">
               Join The Orange Army
             </span>
@@ -180,7 +192,7 @@ export function Footer() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-xl bg-white text-[#D93800] hover:bg-white/95 font-heading text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl transition-all cursor-pointer active:scale-98 group"
+                  className="w-full py-3.5 px-6 rounded-xl bg-white text-[#D93800] hover:bg-white/95 font-redzone text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl transition-all cursor-pointer active:scale-98 group"
                 >
                   <span>Subscribe to Newsletter</span>
                   <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -192,15 +204,19 @@ export function Footer() {
 
         {/* 
           Giant Typography Wordmark across the Footer
-          (Fully responsive, no right cutoff, no bottom cutoff)
+          (Scroll-triggered rise & fade animation when scrolled into view)
         */}
         <div className="w-full flex items-center justify-center overflow-visible pt-4 pb-6 sm:pb-8 border-t border-white/15">
-          <h1
-            className="font-redzone text-[10.5vw] sm:text-[11.2vw] md:text-[11.8vw] font-black uppercase text-white tracking-tight leading-[0.95] select-none text-center drop-shadow-[0_15px_35px_rgba(0,0,0,0.3)] w-full block whitespace-nowrap"
+          <motion.h1
+            initial={{ opacity: 0, y: 80 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="font-redzone text-[10.5vw] sm:text-[11.2vw] md:text-[11.8vw] font-black uppercase text-white tracking-tight leading-[0.95] select-none text-center drop-shadow-[0_15px_35px_rgba(0,0,0,0.3)] w-full block whitespace-nowrap will-change-transform"
             style={{ letterSpacing: "-0.02em" }}
           >
             SUNRISERS
-          </h1>
+          </motion.h1>
         </div>
 
         {/* Bottom Bar: Original Logo, Copyright, and Legal Policies */}

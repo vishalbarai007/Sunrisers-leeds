@@ -31,7 +31,7 @@ export function PointsTableSection() {
       >
         <div className="flex items-center gap-2 mb-2">
           <span className="w-2 h-2 rounded-full bg-[#FF4B03]" />
-          <span className="font-forma text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#FF4B03]">
+          <span className="font-redzone text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#FF4B03]">
             2026 LEAGUE STANDINGS
           </span>
         </div>
@@ -63,11 +63,22 @@ export function PointsTableSection() {
           ))}
         </div>
 
+        {/* Consistent geometric dots watermark (36px x 36px) across orange backgrounds */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.035] mix-blend-overlay z-0 rounded-2xl overflow-hidden"
+          style={{
+            backgroundImage:
+              "radial-gradient(#000 1.2px, transparent 1.2px), radial-gradient(#000 1.2px, #FFFFFF 1.2px)",
+            backgroundSize: "36px 36px",
+            backgroundPosition: "0 0, 18px 18px"
+          }}
+        />
+
         {/* Counter-skew wrapper to ensure text remains crisp & straight */}
         <div className="relative z-10 md:skew-x-[2deg]">
           {/* Table Column Header Strip */}
-          <div className="rounded-xl bg-white/95 backdrop-blur-sm px-3 sm:px-5 md:px-8 py-3.5 shadow-md border border-white/60 mb-2">
-            <div className="grid w-full items-center grid-cols-[minmax(0,1fr)_44px_44px_44px_62px_44px] sm:grid-cols-[minmax(0,1fr)_56px_56px_56px_76px_56px] md:grid-cols-[minmax(0,1fr)_72px_72px_72px_96px_76px] lg:grid-cols-[minmax(0,1fr)_80px_80px_80px_104px_84px] text-[#0A0E1A] font-forma font-extrabold uppercase tracking-[0.14em] text-[11px] sm:text-xs md:text-sm">
+          <div className="rounded-xl bg-white/95 backdrop-blur-sm px-2.5 sm:px-5 md:px-8 py-3 sm:py-3.5 shadow-md border border-white/60 mb-2">
+            <div className="grid w-full items-center grid-cols-[minmax(0,1fr)_28px_26px_26px_48px_32px] sm:grid-cols-[minmax(0,1fr)_48px_48px_48px_68px_48px] md:grid-cols-[minmax(0,1fr)_72px_72px_72px_96px_76px] lg:grid-cols-[minmax(0,1fr)_80px_80px_80px_104px_84px] text-[#0A0E1A] font-forma font-extrabold uppercase tracking-[0.08em] sm:tracking-[0.14em] text-[10px] sm:text-xs md:text-sm">
               <span className="md:pl-10 text-left">TEAMS</span>
               <span className="text-center font-black">MAT</span>
               <span className="text-center font-black">W</span>
@@ -91,8 +102,8 @@ export function PointsTableSection() {
                   transition={{ ease: "easeOut", duration: 0.45, delay: index * 0.035 }}
                   className={`relative transition-all duration-300 ${
                     isHighlighted
-                      ? "my-1.5 py-3 sm:py-3.5 px-3 sm:px-5 md:px-8 rounded-xl bg-white text-[#0A0E1A] shadow-[0_12px_36px_rgba(0,0,0,0.28)] ring-2 ring-[#FFCB05] z-10 scale-[1.01] border border-amber-200"
-                      : "py-2.5 sm:py-3 px-3 sm:px-5 md:px-8 text-white hover:bg-white/[0.08] rounded-xl relative"
+                      ? "my-1.5 py-2.5 sm:py-3.5 px-2.5 sm:px-5 md:px-8 rounded-xl bg-white text-[#0A0E1A] shadow-[0_12px_36px_rgba(0,0,0,0.28)] ring-2 ring-[#FFCB05] z-10 scale-[1.01] border border-amber-200"
+                      : "py-2 sm:py-3 px-2.5 sm:px-5 md:px-8 text-white hover:bg-white/[0.08] rounded-xl relative"
                   }`}
                 >
                   {/* Subtle horizontal divider line for non-highlighted rows */}
@@ -106,12 +117,12 @@ export function PointsTableSection() {
                     />
                   )}
 
-                  <div className="grid w-full items-center grid-cols-[minmax(0,1fr)_44px_44px_44px_62px_44px] sm:grid-cols-[minmax(0,1fr)_56px_56px_56px_76px_56px] md:grid-cols-[minmax(0,1fr)_72px_72px_72px_96px_76px] lg:grid-cols-[minmax(0,1fr)_80px_80px_80px_104px_84px]">
+                  <div className="grid w-full items-center grid-cols-[minmax(0,1fr)_28px_26px_26px_48px_32px] sm:grid-cols-[minmax(0,1fr)_48px_48px_48px_68px_48px] md:grid-cols-[minmax(0,1fr)_72px_72px_72px_96px_76px] lg:grid-cols-[minmax(0,1fr)_80px_80px_80px_104px_84px]">
                     {/* Rank + Metallic Gold Badge + Team Name + Q status */}
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 pr-2">
+                    <div className="flex items-center gap-1.5 sm:gap-3 md:gap-4 min-w-0 pr-1 sm:pr-2">
                       {/* Rank Number */}
                       <span
-                        className={`font-forma text-xs sm:text-sm md:text-base font-black w-5 sm:w-6 shrink-0 ${
+                        className={`font-forma text-[11px] sm:text-sm md:text-base font-black w-4 sm:w-6 shrink-0 ${
                           isHighlighted ? "text-[#E64200]" : "text-white/80"
                         }`}
                       >
@@ -120,7 +131,7 @@ export function PointsTableSection() {
 
                       {/* Metallic Gold Gradient Circle Badge */}
                       <div
-                        className="relative flex h-8 w-8 sm:h-9 sm:w-9 md:h-11 md:w-11 shrink-0 items-center justify-center rounded-full p-[1.5px] shadow-sm"
+                        className="relative flex h-7 w-7 sm:h-9 sm:w-9 md:h-11 md:w-11 shrink-0 items-center justify-center rounded-full p-[1.5px] shadow-sm"
                         style={{
                           background:
                             "linear-gradient(59deg, #D0A440 0%, #FFF690 21%, #C6932F 57%, #B17D1E 67%, #895500 82%, #905D06 84%, #A57318 87%, #C79636 90%, #DCAD49 92%, #FBF09C 100%)"
@@ -138,7 +149,7 @@ export function PointsTableSection() {
                       </div>
 
                       {/* Team Name + Qualified Badge */}
-                      <div className="flex items-center gap-2 min-w-0 truncate">
+                      <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 truncate">
                         {/* Desktop Team Name */}
                         <span
                           className={`hidden md:inline font-forma text-sm lg:text-base truncate ${

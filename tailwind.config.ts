@@ -67,11 +67,11 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)"
       },
       fontFamily: {
-        sans: ["var(--font-forma)", "var(--font-sans)", "Inter", "sans-serif"],
-        heading: ["var(--font-redzone)", "var(--font-heading)", "'Outfit'", "sans-serif"],
-        redzone: ["var(--font-redzone)", "Impact", "sans-serif"],
-        forma: ["var(--font-forma)", "Inter", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"]
+        sans: ["var(--font-forma)", "sans-serif"],
+        heading: ["var(--font-redzone)", "sans-serif"],
+        redzone: ["var(--font-redzone)", "sans-serif"],
+        forma: ["var(--font-forma)", "sans-serif"],
+        mono: ["var(--font-redzone)", "sans-serif"]
       },
       boxShadow: {
         sports: "0 10px 30px -10px rgba(255, 75, 3, 0.4)",

@@ -180,7 +180,7 @@ export function FixturesSection() {
       >
         <div className="flex items-center gap-2 mb-1.5">
           <span className="w-2 h-2 rounded-full bg-[#FF4B03]" />
-          <span className="font-forma text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#FF4B03]">
+          <span className="font-redzone text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#FF4B03]">
             OFFICIAL 2026 MATCH CALENDAR
           </span>
         </div>
@@ -192,7 +192,7 @@ export function FixturesSection() {
         </h2>
       </motion.div>
 
-      <div className="w-full overflow-hidden md:max-w-7xl md:mx-auto md:px-6 py-2 md:py-4 relative z-10">
+      <div className="w-full overflow-hidden max-w-7xl mx-auto px-3 sm:px-6 py-2 md:py-4 relative z-10">
         {/* Top Date Strip Carousel */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -201,14 +201,6 @@ export function FixturesSection() {
           transition={{ ease: "easeInOut", duration: 0.9, delay: 0.1 }}
         >
           <div className="w-full flex items-center gap-0 md:gap-4 border-y border-slate-200 py-2.5 md:py-4">
-            <button
-              onClick={handlePrev}
-              aria-label="Previous dates"
-              className="shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-[#FF4E03] via-[#FF6200] to-[#CF2E00] text-white hover:brightness-110 shadow-md shadow-[#FF4E03]/35 transition-all flex items-center justify-center cursor-pointer active:scale-95 border border-white/20"
-            >
-              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white" strokeWidth={2.4} />
-            </button>
-
             <div className="w-full overflow-hidden" ref={emblaRef}>
               <div className="flex">
                 {dates.map((dateStr, idx) => {
@@ -253,14 +245,6 @@ export function FixturesSection() {
                 })}
               </div>
             </div>
-
-            <button
-              onClick={handleNext}
-              aria-label="Next dates"
-              className="shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-[#FF4E03] via-[#FF6200] to-[#CF2E00] text-white hover:brightness-110 shadow-md shadow-[#FF4E03]/35 transition-all flex items-center justify-center cursor-pointer active:scale-95 border border-white/20"
-            >
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white" strokeWidth={2.4} />
-            </button>
           </div>
         </motion.div>
 
@@ -321,7 +305,7 @@ export function FixturesSection() {
                       alt="VS"
                       width={240}
                       height={240}
-                      className="block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[15vh] md:h-[28vh] w-auto z-10 pointer-events-none select-none opacity-80"
+                      className="block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[12vh] sm:h-[16vh] md:h-[20vh] lg:h-[28vh] w-auto z-10 pointer-events-none select-none opacity-80"
                     />
 
                     <div className="p-4 sm:p-6 md:p-10 w-full rounded-xl bg-gradient-to-r from-[#FFF5EE] via-[#FFEFE5] to-[#FFF5EE] border border-[#FF4E03]/30 overflow-hidden skew-x-[0deg] md:skew-x-[-10deg] shadow-xl">
@@ -394,7 +378,7 @@ export function FixturesSection() {
                         {/* AWAY TEAM (Right Half) */}
                         <div className="w-1/2 flex flex-col-reverse lg:flex-row items-center justify-end gap-2.5 lg:gap-6 md:pl-10 lg:pl-14">
                           {/* Away Team Score & Name */}
-                          <div className="flex flex-col lg:flex-row justify-between items-center w-full gap-1.5 lg:gap-4">
+                          <div className="flex flex-col-reverse lg:flex-row justify-between items-center w-full gap-1.5 lg:gap-4">
                             <div className="flex flex-col items-center lg:items-start shrink-0">
                               <SlideReveal
                                 direction="down"
@@ -476,7 +460,7 @@ export function FixturesSection() {
                   <div className="w-full flex justify-center mt-3 md:mt-4">
                     <Link
                       href="#fixtures"
-                      className="px-5 py-1.5 font-forma font-bold text-xs sm:text-sm md:text-base bg-gradient-to-r from-[#FF4E03] via-[#FF6200] to-[#CF2E00] bg-clip-text text-transparent underline underline-offset-4 hover:opacity-80 transition"
+                      className="px-5 py-1.5 font-redzone font-black text-xs sm:text-sm md:text-base uppercase tracking-wider bg-gradient-to-r from-[#FF4E03] via-[#FF6200] to-[#CF2E00] bg-clip-text text-transparent underline underline-offset-4 hover:opacity-80 transition"
                     >
                       View Full Schedule
                     </Link>

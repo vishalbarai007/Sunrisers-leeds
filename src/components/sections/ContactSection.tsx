@@ -134,15 +134,18 @@ export function ContactSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-[1280px] min-h-[580px] sm:min-h-[640px] lg:min-h-[680px] rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#E64200]/92 via-[#FF5500]/88 to-[#C92F00]/92 backdrop-blur-md border border-white/30 shadow-[0_30px_90px_-15px_rgba(230,66,0,0.5)] p-8 sm:p-12 md:p-16 lg:p-20 text-white flex flex-col justify-center"
+        className="relative z-10 w-full max-w-[1280px] min-h-[540px] sm:min-h-[640px] lg:min-h-[680px] rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#E64200]/60 via-[#FF5500]/45 to-[#C92F00]/55 backdrop-blur-2xl backdrop-saturate-150 border border-white/35 shadow-[0_30px_90px_-15px_rgba(230,66,0,0.35),inset_0_1px_2px_rgba(255,255,255,0.4)] p-6 sm:p-12 md:p-16 lg:p-20 text-white flex flex-col justify-center overflow-hidden"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-start">
+        {/* Top specular reflection for glass finish */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 lg:gap-16 items-start">
           {/* Left Column: Heading & Subtext */}
           <div className="lg:col-span-5 flex flex-col justify-start">
-            <h2 className="font-redzone text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-wide text-white leading-[0.92]">
+            <h2 className="font-redzone text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-wide text-white leading-[0.92]">
               CONTACT
             </h2>
-            <p className="font-forma text-sm sm:text-base md:text-lg text-white/90 mt-4 sm:mt-6 font-medium leading-relaxed max-w-sm">
+            <p className="font-forma text-sm sm:text-base md:text-lg text-white/90 mt-3 sm:mt-6 font-medium leading-relaxed max-w-sm">
               Ready to support or just have questions ?
             </p>
           </div>
@@ -253,7 +256,7 @@ export function ContactSection() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group inline-flex items-center justify-center gap-2 px-8 sm:px-10 py-3.5 sm:py-4 rounded-lg bg-[#FFFFFF] text-[#D93800] hover:bg-white/95 font-redzone text-sm sm:text-base font-black uppercase tracking-wider shadow-xl hover:shadow-2xl active:scale-95 transition-all cursor-pointer disabled:opacity-70"
+                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 sm:px-10 py-3.5 sm:py-4 rounded-lg bg-[#FFFFFF] text-[#D93800] hover:bg-white/95 font-redzone text-sm sm:text-base font-black uppercase tracking-wider shadow-xl hover:shadow-2xl active:scale-95 transition-all cursor-pointer disabled:opacity-70"
                   >
                     <span>{isSubmitting ? "SUBMITTING..." : "SUBMIT"}</span>
                     <ChevronsRight

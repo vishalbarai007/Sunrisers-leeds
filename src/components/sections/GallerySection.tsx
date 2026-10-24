@@ -299,15 +299,14 @@ export function GallerySection() {
       id="gallery"
       className="relative w-full h-[100svh] overflow-hidden bg-gradient-to-br from-[#FF4B03] via-[#F4570B] to-[#C92F00] text-white select-none"
     >
-      {/* Background Matrix Grid Overlay (White Grid Pattern on Orange Background) */}
+      {/* Background Matrix Grid Overlay (Unified with all orange sections) */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none opacity-20"
+        className="absolute inset-0 z-0 pointer-events-none opacity-[0.035] mix-blend-overlay"
         style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(255, 255, 255, 0.28) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.28) 1px, transparent 1px)
-          `,
-          backgroundSize: "44px 44px"
+          backgroundImage:
+            "radial-gradient(#000 1.2px, transparent 1.2px), radial-gradient(#000 1.2px, #FFFFFF 1.2px)",
+          backgroundSize: "36px 36px",
+          backgroundPosition: "0 0, 18px 18px"
         }}
         aria-hidden="true"
       />
@@ -329,15 +328,14 @@ export function GallerySection() {
         ref={pinWrapperRef}
         className="relative w-full h-[100svh] overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#FF4B03] via-[#F4570B] to-[#C92F00]"
       >
-        {/* Crisp Grid Background inside Pinned Viewport */}
+        {/* Crisp Grid Background inside Pinned Viewport (Unified 36px) */}
         <div
-          className="absolute inset-0 z-0 pointer-events-none opacity-20"
+          className="absolute inset-0 z-0 pointer-events-none opacity-[0.035] mix-blend-overlay"
           style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(255, 255, 255, 0.28) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(255, 255, 255, 0.28) 1px, transparent 1px)
-            `,
-            backgroundSize: "44px 44px"
+            backgroundImage:
+              "radial-gradient(#000 1.2px, transparent 1.2px), radial-gradient(#000 1.2px, #FFFFFF 1.2px)",
+            backgroundSize: "36px 36px",
+            backgroundPosition: "0 0, 18px 18px"
           }}
           aria-hidden="true"
         />
@@ -355,12 +353,12 @@ export function GallerySection() {
         </div>
 
         {/* Floating Skip to Contact Button */}
-        <div className="absolute top-5 sm:top-7 right-5 sm:right-8 md:right-12 z-50 pointer-events-auto">
+        <div className="absolute top-20 sm:top-24 lg:top-7 right-4 sm:right-8 md:right-12 z-50 pointer-events-auto">
           <button
             type="button"
             onClick={handleSkip}
             aria-label="Skip gallery to contact section"
-            className="group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-black/45 hover:bg-black/80 border border-white/25 hover:border-white/50 text-white text-[11px] sm:text-xs font-forma font-bold uppercase tracking-wider backdrop-blur-md transition-all duration-300 hover:scale-105 shadow-xl cursor-pointer"
+            className="group inline-flex items-center gap-2 px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-full bg-black/45 hover:bg-black/80 border border-white/25 hover:border-white/50 text-white text-[10px] sm:text-xs font-redzone font-black uppercase tracking-wider backdrop-blur-md transition-all duration-300 hover:scale-105 shadow-xl cursor-pointer"
           >
             <span>Skip Gallery</span>
             <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
@@ -373,19 +371,19 @@ export function GallerySection() {
         */}
         <div
           ref={titleWrapRef}
-          className="absolute top-8 sm:top-12 md:top-14 inset-x-0 mx-auto w-full max-w-4xl px-6 z-30 text-center flex flex-col items-center pointer-events-none transform-gpu will-change-transform"
+          className="absolute top-20 sm:top-24 md:top-24 lg:top-14 inset-x-0 mx-auto w-full max-w-4xl px-4 sm:px-6 z-30 text-center flex flex-col items-center pointer-events-none transform-gpu will-change-transform"
           style={{
             transformOrigin: "center center"
           }}
         >
-          <div className="inline-flex items-center gap-2 mb-2 sm:mb-3">
-            <span className="w-8 h-[2px] bg-white/70" />
-            <span className="text-xs uppercase tracking-[0.25em] text-white/90 font-bold font-forma">
+          <div className="inline-flex items-center gap-2 mb-1.5 sm:mb-3">
+            <span className="w-6 sm:w-8 h-[2px] bg-white/70" />
+            <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-white/90 font-bold font-redzone">
               SUNRISERS GALLERY · MOMENTS OF FIRE
             </span>
-            <span className="w-8 h-[2px] bg-white/70" />
+            <span className="w-6 sm:w-8 h-[2px] bg-white/70" />
           </div>
-          <h2 className="font-heading text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight uppercase leading-[1.08]">
+          <h2 className="font-redzone text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-wider uppercase leading-[1.08]">
             Unleash The Fire Within.
           </h2>
         </div>
@@ -393,7 +391,7 @@ export function GallerySection() {
         {/* Left Floating Image Card (No rounded corners, no border) */}
         <div
           ref={leftCardRef}
-          className="hidden md:block absolute left-[3%] lg:left-[5%] xl:left-[7%] top-1/2 -translate-y-1/2 z-20 w-[220px] lg:w-[260px] h-[320px] lg:h-[390px] rounded-none border-0 overflow-hidden shadow-2xl bg-black/40 pointer-events-none"
+          className="hidden md:block absolute left-[2%] lg:left-[5%] xl:left-[7%] top-1/2 -translate-y-1/2 z-20 w-[145px] lg:w-[260px] h-[240px] lg:h-[390px] rounded-none border-0 overflow-hidden shadow-2xl bg-black/40 pointer-events-none"
         >
           <div className="relative w-full h-full">
             <Image
@@ -404,11 +402,11 @@ export function GallerySection() {
               className="object-cover object-top"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4 text-white">
-              <span className="text-[10px] uppercase tracking-widest text-[#FFCB05] font-bold block mb-0.5 font-forma">
+            <div className="absolute bottom-3 lg:bottom-4 left-3 lg:left-4 right-3 lg:right-4 text-white">
+              <span className="text-[9px] lg:text-[10px] uppercase tracking-widest text-[#FFCB05] font-bold block mb-0.5 font-forma">
                 TABLE TOPPERS
               </span>
-              <span className="text-sm font-bold truncate block font-heading tracking-wide">
+              <span className="text-xs lg:text-sm font-bold truncate block font-redzone tracking-wide">
                 Defending Modest Totals
               </span>
             </div>
@@ -418,7 +416,7 @@ export function GallerySection() {
         {/* Right Floating Image Card (No rounded corners, no border) */}
         <div
           ref={rightCardRef}
-          className="hidden md:block absolute right-[3%] lg:right-[5%] xl:right-[7%] top-1/2 -translate-y-1/2 z-20 w-[220px] lg:w-[260px] h-[320px] lg:h-[390px] rounded-none border-0 overflow-hidden shadow-2xl bg-black/40 pointer-events-none"
+          className="hidden md:block absolute right-[2%] lg:right-[5%] xl:right-[7%] top-1/2 -translate-y-1/2 z-20 w-[145px] lg:w-[260px] h-[240px] lg:h-[390px] rounded-none border-0 overflow-hidden shadow-2xl bg-black/40 pointer-events-none"
         >
           <div className="relative w-full h-full">
             <Image
@@ -429,11 +427,11 @@ export function GallerySection() {
               className="object-cover object-top"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4 text-white">
-              <span className="text-[10px] uppercase tracking-widest text-[#FFCB05] font-bold block mb-0.5 font-forma">
+            <div className="absolute bottom-3 lg:bottom-4 left-3 lg:left-4 right-3 lg:right-4 text-white">
+              <span className="text-[9px] lg:text-[10px] uppercase tracking-widest text-[#FFCB05] font-bold block mb-0.5 font-forma">
                 FEARLESS INTENT
               </span>
-              <span className="text-sm font-bold truncate block font-heading tracking-wide">
+              <span className="text-xs lg:text-sm font-bold truncate block font-redzone tracking-wide">
                 Relentless Boundary Carnage
               </span>
             </div>
@@ -458,7 +456,7 @@ export function GallerySection() {
           <div className="relative w-[100vw] h-full shrink-0 flex items-center justify-center overflow-hidden">
             <div
               ref={centerCardRef}
-              className="relative w-[88vw] sm:w-[580px] lg:w-[640px] h-[360px] sm:h-[440px] lg:h-[480px] rounded-none border-0 overflow-hidden shadow-2xl bg-slate-900 transition-none will-change-[width,height]"
+              className="relative w-[88vw] sm:w-[520px] md:w-[420px] lg:w-[640px] h-[340px] sm:h-[400px] md:h-[380px] lg:h-[480px] rounded-none border-0 overflow-hidden shadow-2xl bg-slate-900 transition-none will-change-[width,height]"
             >
               <Image
                 src={GALLERY_SLIDES[0].image}
@@ -473,13 +471,13 @@ export function GallerySection() {
               {/* Initial Center Card Label (Stage 1) */}
               <div
                 ref={centerInitialBadgeRef}
-                className="absolute bottom-5 sm:bottom-6 left-5 sm:left-6 right-5 sm:right-6 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-3 pointer-events-none"
+                className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-3 pointer-events-none"
               >
                 <div>
                   <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#FFCB05] font-bold block mb-1 font-forma">
                     SUNRISERS · THE CHAMPIONSHIP MAIDEN
                   </span>
-                  <h3 className="text-lg sm:text-2xl font-bold font-heading uppercase tracking-wide">
+                  <h3 className="text-base sm:text-2xl font-bold font-redzone uppercase tracking-wide">
                     2016 Historic IPL Championship
                   </h3>
                   <p className="text-[11px] sm:text-xs text-white/85 mt-1 max-w-md font-forma">
@@ -491,16 +489,16 @@ export function GallerySection() {
               {/* Fullscreen Editorial Overlay (Stage 2: Full Viewport Active) */}
               <div
                 ref={slide1FullBadgeRef}
-                className="absolute inset-x-0 bottom-0 p-6 sm:p-10 md:p-14 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pointer-events-auto"
+                className="absolute inset-x-0 bottom-0 p-5 pb-8 sm:p-10 md:p-12 lg:p-14 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pointer-events-auto"
               >
                 <div className="max-w-2xl text-white">
-                  <div className="text-xs uppercase tracking-[0.25em] text-[#FFCB05] font-bold mb-1.5 font-forma">
+                  <div className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#FFCB05] font-bold mb-1.5 font-forma">
                     {GALLERY_SLIDES[0].badge}
                   </div>
                   <h3 className="font-heading text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
                     {GALLERY_SLIDES[0].title}
                   </h3>
-                  <p className="text-xs sm:text-sm md:text-base text-white/85 mt-2 font-normal font-forma max-w-xl leading-relaxed">
+                  <p className="text-xs sm:text-sm md:text-base text-white/85 mt-2 font-normal font-forma max-w-xl leading-relaxed line-clamp-3 sm:line-clamp-none">
                     {GALLERY_SLIDES[0].subtitle}
                   </p>
                 </div>
@@ -508,7 +506,7 @@ export function GallerySection() {
                 <button
                   type="button"
                   onClick={handleSkip}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-semibold uppercase tracking-wider backdrop-blur-md transition-all shadow-lg cursor-pointer shrink-0"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-redzone font-black uppercase tracking-wider backdrop-blur-md transition-all shadow-lg cursor-pointer shrink-0"
                 >
                   <span>{GALLERY_SLIDES[0].actionText}</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -534,15 +532,15 @@ export function GallerySection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/30" />
 
-              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 md:p-14 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pointer-events-auto">
+              <div className="absolute inset-x-0 bottom-0 p-5 pb-8 sm:p-10 md:p-12 lg:p-14 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pointer-events-auto">
                 <div className="max-w-2xl text-white">
-                  <div className="text-xs uppercase tracking-[0.25em] text-[#FFCB05] font-bold mb-1.5 font-forma">
+                  <div className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#FFCB05] font-bold mb-1.5 font-redzone">
                     {slide.badge}
                   </div>
-                  <h3 className="font-heading text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+                  <h3 className="font-redzone text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
                     {slide.title}
                   </h3>
-                  <p className="text-xs sm:text-sm md:text-base text-white/85 mt-2 font-normal font-forma max-w-xl leading-relaxed">
+                  <p className="text-xs sm:text-sm md:text-base text-white/85 mt-2 font-normal font-forma max-w-xl leading-relaxed line-clamp-3 sm:line-clamp-none">
                     {slide.subtitle}
                   </p>
                 </div>
@@ -550,7 +548,7 @@ export function GallerySection() {
                 <button
                   type="button"
                   onClick={handleSkip}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-semibold uppercase tracking-wider backdrop-blur-md transition-all shadow-lg cursor-pointer shrink-0"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-redzone font-black uppercase tracking-wider backdrop-blur-md transition-all shadow-lg cursor-pointer shrink-0"
                 >
                   <span>{slide.actionText}</span>
                   <ArrowUpRight className="w-4 h-4" />

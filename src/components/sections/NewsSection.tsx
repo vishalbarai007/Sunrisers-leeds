@@ -1,55 +1,144 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import useEmblaCarousel from "embla-carousel-react";
-import { motion } from "framer-motion";
-import { newsArticles } from "@/data/news";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Newspaper } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { newsArticles, NewsItem } from "@/data/news";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Sparkles,
+  FileText,
+  Compass,
+  Layers,
+  TrendingUp,
+  Bookmark,
+  Radio
+} from "lucide-react";
+
+// Icons corresponding to each slot in the bento layout
+const BENTO_ICONS = [
+  FileText,
+  Sparkles,
+  Layers,
+  Radio,
+  Bookmark,
+  TrendingUp,
+  Compass
+];
+
+interface BentoCardProps {
+  article: NewsItem;
+  slotIndex: number;
+  isWide?: boolean;
+}
+
+function BentoCard({ article, slotIndex, isWide = false }: BentoCardProps) {
+  const IconComponent = BENTO_ICONS[slotIndex % BENTO_ICONS.length];
+
+  return (
+    <motion.div
+      layout
+      key={article.id}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className={`group relative rounded-2xl border border-white/15 bg-[#0B0E17]/90 backdrop-blur-md p-2.5 sm:p-3 lg:p-3.5 flex flex-col justify-between hover:border-[#FF4E03]/60 transition-all duration-300 shadow-xl overflow-hidden ${
+        isWide ? "md:col-span-2" : "col-span-1"
+      }`}
+    >
+      <Link
+        href={article.link}
+        className="flex flex-col justify-between h-full w-full"
+        title={article.title}
+      >
+        {/* UPPER SUBGRID AREA: COVERED BY CARD IMAGE */}
+        <div
+          className={`relative w-full rounded-xl overflow-hidden bg-black/40 border border-white/10 ${
+            isWide
+              ? "aspect-[21/9] sm:aspect-[22/9]"
+              : "aspect-[16/10] sm:aspect-[16/10]"
+          }`}
+        >
+          <Image
+            src={article.image}
+            alt={article.title}
+            fill
+            sizes={
+              isWide
+                ? "(max-width: 768px) 90vw, 680px"
+                : "(max-width: 768px) 90vw, 360px"
+            }
+            className="object-cover object-center group-hover:scale-105 transition-transform duration-500 filter contrast-105"
+          />
+
+          {/* Vignette gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent pointer-events-none" />
+
+          {/* Top category badge */}
+          <div className="absolute top-2 left-2 z-10 flex items-center gap-1.5">
+            <span className="bg-[#070A12]/80 backdrop-blur-md text-white font-redzone text-[8px] sm:text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border border-white/15">
+              {article.category}
+            </span>
+          </div>
+
+          {/* Top Right Arrow Indicator */}
+          <div className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/10 group-hover:bg-[#FF4E03] text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg">
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </div>
+        </div>
+
+        {/* LOWER SUBGRID AREA: ICON + TITLE + SUBTITLE / DESCRIPTION */}
+        <div className="pt-2 sm:pt-2.5 flex flex-col justify-end">
+          <div className="flex items-center gap-1.5 mb-1 text-white/60">
+            <IconComponent className="w-3.5 h-3.5 text-[#FF4E03] shrink-0" />
+            <span className="font-forma text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider">
+              {article.date} &bull; {article.readTime}
+            </span>
+          </div>
+
+          <h3 className="font-redzone font-black text-xs sm:text-sm lg:text-base text-white uppercase tracking-wide group-hover:text-[#FF4E03] transition-colors duration-200 line-clamp-1 leading-tight">
+            {article.title}
+          </h3>
+
+          <p className="font-forma text-[11px] sm:text-xs text-white/70 line-clamp-1 mt-0.5 leading-snug">
+            {article.subtitle}
+          </p>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
 
 export function NewsSection() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: "start",
-    loop: true,
-    dragFree: true,
-    containScroll: "trimSnaps"
+  const [startIndex, setStartIndex] = useState(0);
+
+  // Next: shifts 1 card out from the left and brings 1 new card in from the right
+  const handleNext = () => {
+    setStartIndex((prev) => (prev + 1) % newsArticles.length);
+  };
+
+  // Prev: shifts 1 card in from the left and brings 1 card out to the right
+  const handlePrev = () => {
+    setStartIndex(
+      (prev) => (prev - 1 + newsArticles.length) % newsArticles.length
+    );
+  };
+
+  // 7 cards visible in the bento layout matching the attached image
+  const visibleArticles = Array.from({ length: 7 }, (_, i) => {
+    return newsArticles[(startIndex + i) % newsArticles.length];
   });
-
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(true);
-
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
-    return () => {
-      emblaApi.off("select", onSelect);
-      emblaApi.off("reInit", onSelect);
-    };
-  }, [emblaApi, onSelect]);
 
   return (
     <section
       id="news"
-      className="relative w-full bg-gradient-to-br from-[#D93800] via-[#F4570B] to-[#C92F00] text-white py-20 sm:py-28 overflow-hidden select-none border-t border-white/15"
+      className="relative w-full min-h-[70vh] py-12 lg:py-16 bg-gradient-to-br from-[#D93800] via-[#F4570B] to-[#C92F00] text-white overflow-hidden select-none border-t border-white/15 flex flex-col justify-center"
     >
-      {/* Subtle Architectural Grid Lines from Footer (Applied to all orange sections as requested) */}
+      {/* Subtle Architectural Grid Lines */}
       <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-8 pointer-events-none z-0">
         <div className="border-r border-white/[0.08] h-full" />
         <div className="border-r border-white/[0.08] h-full" />
@@ -61,107 +150,109 @@ export function NewsSection() {
         <div className="hidden md:block h-full" />
       </div>
 
-      {/* GIANT BACKGROUND TEXT (Replaced "MEDIA & ARTICLES" with "NEWS & ARTICLES" in white & grey gradient as requested) */}
-      <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none select-none z-0">
-        <span className="font-redzone font-black text-[14vw] tracking-tighter uppercase whitespace-nowrap bg-gradient-to-b from-white/20 via-white/10 to-transparent bg-clip-text text-transparent">
-          NEWS &amp; ARTICLES
+      {/* Consistent Orange Background Dotted Grid (36px 36px) */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035] mix-blend-overlay z-0"
+        style={{
+          backgroundImage:
+            "radial-gradient(#000 1.2px, transparent 1.2px), radial-gradient(#000 1.2px, #FFFFFF 1.2px)",
+          backgroundSize: "36px 36px",
+          backgroundPosition: "0 0, 18px 18px"
+        }}
+      />
+
+      {/* GIANT BACKGROUND TEXT Covering whole component with gradient effect */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-0 overflow-hidden leading-none">
+        <span className="font-redzone font-black text-[18vw] sm:text-[16vw] lg:text-[14vw] tracking-tighter uppercase whitespace-nowrap bg-gradient-to-b from-white/20 via-white/10 to-transparent bg-clip-text text-transparent">
+          NEWS &amp;
+        </span>
+        <span className="font-redzone font-black text-[18vw] sm:text-[16vw] lg:text-[14vw] tracking-tighter uppercase whitespace-nowrap bg-gradient-to-b from-white/15 via-white/05 to-transparent bg-clip-text text-transparent -mt-[4vw]">
+          ARTICLES
         </span>
       </div>
 
-      <div className="relative z-10 w-full px-6 sm:px-10 md:px-14 lg:px-20">
-        {/* TOP HEADER: Title + Navigation Carousel Arrows */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 pb-8 md:pb-12 border-b border-white/20">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-              <span className="font-forma text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-white/80">
-                LATEST DISPATCHES &bull; SUNRISERS LEEDS
-              </span>
-            </div>
-
-            <h2 className="font-redzone text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none">
-              NEWS &amp; ARTICLES
-            </h2>
+      {/* MAIN CONTAINER: TAKES AT LEAST 70% OF SECTION WIDTH */}
+      <div className="relative z-10 w-full max-w-[92vw] lg:w-[74%] xl:w-[72%] mx-auto px-2 sm:px-4 flex flex-col justify-between">
+        {/* TOP HEADER: Centered Title + Prev/Next Controls matching site button font rules */}
+        <div className="relative flex flex-col items-center text-center pb-5 sm:pb-6 border-b border-white/20">
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+            <span className="font-redzone text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-white/90">
+              LATEST DISPATCHES &bull; SUNRISERS LEEDS
+            </span>
           </div>
 
-          {/* Navigation Arrows (Matches Nick Ho carousel controls) */}
-          <div className="flex items-center gap-2.5">
+          <h2 className="font-redzone text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wider text-white leading-none">
+            NEWS &amp; ARTICLES
+          </h2>
+
+          {/* PREV / NEXT BUTTONS (Following site font rules: font-redzone) */}
+          <div className="mt-3.5 sm:mt-0 sm:absolute sm:right-0 sm:bottom-5 sm:translate-y-1/2 flex items-center gap-2">
             <button
-              onClick={scrollPrev}
-              aria-label="Previous articles"
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-white/30 bg-white/10 hover:bg-white text-white hover:text-[#D93800] transition-all flex items-center justify-center cursor-pointer shadow-lg active:scale-95"
+              onClick={handlePrev}
+              aria-label="Previous article"
+              className="px-3.5 py-1.5 rounded-lg bg-[#070A12]/80 hover:bg-[#FF4E03] text-white border border-white/20 font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg hover:border-white/40"
             >
-              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2} />
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>PREV</span>
             </button>
+
             <button
-              onClick={scrollNext}
-              aria-label="Next articles"
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-white/30 bg-white/10 hover:bg-white text-white hover:text-[#D93800] transition-all flex items-center justify-center cursor-pointer shadow-lg active:scale-95"
+              onClick={handleNext}
+              aria-label="Next article"
+              className="px-3.5 py-1.5 rounded-lg bg-[#070A12]/80 hover:bg-[#FF4E03] text-white border border-white/20 font-redzone font-black text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-lg hover:border-white/40"
             >
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2} />
+              <span>NEXT</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* CAROUSEL TRACK */}
-        <div className="pt-8 md:pt-10 overflow-hidden" ref={emblaRef}>
-          <div className="flex -ml-4 sm:-ml-6">
-            {newsArticles.map((article, idx) => (
-              <div
-                key={article.id}
-                className="min-w-0 shrink-0 grow-0 basis-[85%] sm:basis-1/2 lg:basis-1/3 pl-4 sm:pl-6"
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ ease: "easeOut", duration: 0.6, delay: idx * 0.08 }}
-                >
-                  <Link
-                    href={article.link}
-                    className="group block relative"
-                    title={article.title}
-                  >
-                    {/* Image Container with Nick Ho hover treatment */}
-                    <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden shadow-2xl border border-white/20 bg-black/20">
-                      <Image
-                        src={article.image}
-                        alt={article.title}
-                        fill
-                        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover object-center filter grayscale contrast-110 group-hover:grayscale-0 group-hover:contrast-100 transition-all duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-300" />
+        {/* BENTO GRID CONTAINER MATCHING EXACT ATTACHED IMAGE:
+            Row 1: 3 cards (1-col each)
+            Row 2: 2 cards (Left 2-col wide + Right 1-col)
+            Row 3: 2 cards (Left 1-col + Right 2-col wide)
+        */}
+        <div className="pt-5 sm:pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-3 lg:gap-3.5 w-full">
+            <AnimatePresence mode="popLayout">
+              {/* Row 1: 3 cards */}
+              <BentoCard
+                key={visibleArticles[0].id}
+                article={visibleArticles[0]}
+                slotIndex={0}
+                isWide={false}
+              />
+              <BentoCard
+                key={visibleArticles[1].id}
+                article={visibleArticles[1]}
+                slotIndex={1}
+                isWide={false}
+              />
+              <BentoCard
+                key={visibleArticles[2].id}
+                article={visibleArticles[2]}
+                slotIndex={2}
+                isWide={false}
+              />
 
-                      {/* Top Badges */}
-                      <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-                        <span className="bg-[#0A0E1A]/80 backdrop-blur-md text-white font-forma text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border border-white/15">
-                          {article.category}
-                        </span>
-                      </div>
+              {/* Row 2: 2 cards (Left 2-col wide + Right 1-col) */}
+              <BentoCard
+                key={visibleArticles[3].id}
+                article={visibleArticles[3]}
+                slotIndex={3}
+                isWide={true}
+              />
+              <BentoCard
+                key={visibleArticles[4].id}
+                article={visibleArticles[4]}
+                slotIndex={4}
+                isWide={false}
+              />
 
-                      {/* Hover Arrow Pill */}
-                      <div className="absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 text-[#D93800] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg">
-                        <ArrowUpRight className="w-4 h-4" />
-                      </div>
-                    </div>
-
-                    {/* Content below the card */}
-                    <div className="pt-3.5 space-y-1.5">
-                      <div className="flex items-center gap-2 font-forma text-[10px] sm:text-[11px] font-semibold text-white/70 uppercase tracking-widest">
-                        <span>{article.date}</span>
-                        <span>&bull;</span>
-                        <span>{article.readTime}</span>
-                      </div>
-
-                      <h3 className="font-forma font-bold text-sm sm:text-base text-white/95 group-hover:text-white leading-snug line-clamp-2 transition-colors duration-200">
-                        {article.title}
-                      </h3>
-                    </div>
-                  </Link>
-                </motion.div>
-              </div>
-            ))}
+              {/* Row 3: 2 cards (Left 1-col + Right 2-col wide) */}
+             
+            </AnimatePresence>
           </div>
         </div>
       </div>

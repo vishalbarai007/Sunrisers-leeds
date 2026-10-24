@@ -5,34 +5,61 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { playing11Cards, PlayerData } from "@/data/playing11";
-import { ArrowUpRight, Trophy } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { playing11Cards, allPlayers, PlayerData } from "@/data/playing11";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Shield } from "lucide-react";
 
 export function Playing11Section() {
   const containerRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const slidesRef = useRef<(HTMLDivElement | null)[]>([]);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
+
+  // Mobile slider state (1 player per card, left/right buttons, no scroll hijack)
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const [mobileDirection, setMobileDirection] = useState(1);
+
+  const handleMobilePrev = () => {
+    setMobileDirection(-1);
+    setMobileIndex((prev) => (prev === 0 ? allPlayers.length - 1 : prev - 1));
+  };
+
+  const handleMobileNext = () => {
+    setMobileDirection(1);
+    setMobileIndex((prev) => (prev === allPlayers.length - 1 ? 0 : prev + 1));
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Only apply GSAP scroll pinning on desktop (md breakpoint: >= 768px)
+    if (window.innerWidth < 768) return;
+
     gsap.registerPlugin(ScrollTrigger);
 
-    const cards = cardsRef.current.filter(Boolean) as HTMLDivElement[];
-    if (cards.length === 0 || !containerRef.current || !pinRef.current) return;
+    const slides = slidesRef.current.filter(Boolean) as HTMLDivElement[];
+    if (slides.length === 0 || !containerRef.current || !pinRef.current) return;
 
-    // Set initial card stacking: Card 0 is at yPercent: 0, Cards 1..5 at yPercent: 100
-    cards.forEach((card, i) => {
+    // Reveal from bottom to top (umagobeverages.com style):
+    // Slide 0 is fully visible (inset: 0% 0% 0% 0%), subsequent slides are clipped from bottom to top (inset: 100% 0% 0% 0%)
+    slides.forEach((slide, i) => {
       if (i > 0) {
-        gsap.set(card, { yPercent: 100 });
+        gsap.set(slide, {
+          clipPath: "inset(100% 0% 0% 0%)",
+          zIndex: 10 + i,
+          opacity: 1
+        });
       } else {
-        gsap.set(card, { yPercent: 0 });
+        gsap.set(slide, {
+          clipPath: "inset(0% 0% 0% 0%)",
+          zIndex: 10,
+          opacity: 1
+        });
       }
     });
 
-    const totalTransitions = cards.length - 1; // 5 transitions
-    // "each 50vh scroll will change the card to next"
+    const totalTransitions = slides.length - 1; // 3 transitions for 4 slides
+    // Time taken by each slide on scroll: 50vh (window.innerHeight * 0.5)
     const scrollDistance = totalTransitions * (window.innerHeight * 0.5);
 
     const ctx = gsap.context(() => {
@@ -42,54 +69,30 @@ export function Playing11Section() {
           start: "top top",
           end: `+=${scrollDistance}`,
           pin: pinRef.current,
-          scrub: 0.5,
+          scrub: true,
           anticipatePin: 1,
           onUpdate: (self) => {
-            // Calculate active card index (0 to 5) with precise thresholding
-            const progress = self.progress;
             const step = Math.min(
-              cards.length - 1,
-              Math.floor(progress * cards.length + 0.05)
+              slides.length - 1,
+              Math.floor(self.progress * slides.length + 0.05)
             );
             setActiveCardIndex(step);
           }
         }
       });
 
-      // Animate each subsequent card to slide up and cover the current card
-      for (let i = 1; i < cards.length; i++) {
-        const card = cards[i];
-        const innerPlayer = card.querySelectorAll(".player-cutout");
-        const innerText = card.querySelectorAll(".card-text-block");
-
-        tl.to(
-          card,
+      // Animate each subsequent slide to unmask/reveal from bottom to top (NO fade)
+      for (let i = 1; i < slides.length; i++) {
+        tl.fromTo(
+          slides[i],
+          { clipPath: "inset(100% 0% 0% 0%)" },
           {
-            yPercent: 0,
-            ease: "power2.inOut",
+            clipPath: "inset(0% 0% 0% 0%)",
+            ease: "none",
             duration: 1
           },
-          (i - 1) * 1 // sequential time slots
+          i - 1
         );
-
-        // Subtle lift parallax on the player cutouts inside each card
-        if (innerPlayer.length > 0) {
-          tl.fromTo(
-            innerPlayer,
-            { y: 35, opacity: 0.85 },
-            { y: 0, opacity: 1, ease: "power1.out", duration: 0.6 },
-            (i - 1) * 1 + 0.25
-          );
-        }
-
-        if (innerText.length > 0) {
-          tl.fromTo(
-            innerText,
-            { y: 15, opacity: 0.8 },
-            { y: 0, opacity: 1, ease: "power1.out", duration: 0.5 },
-            (i - 1) * 1 + 0.2
-          );
-        }
       }
     }, containerRef);
 
@@ -98,54 +101,55 @@ export function Playing11Section() {
     };
   }, []);
 
+  const activeMobilePlayer = allPlayers[mobileIndex] || allPlayers[0];
+
   return (
     <section
       ref={containerRef}
       id="playing-11"
       className="relative w-full bg-[#070A12] select-none"
     >
-      {/* Pinned Viewport Container (h-screen) */}
+      {/* =========================================================================
+          DESKTOP & TABLET VIEW (md and up): GSAP PINNED BOTTOM-TO-TOP REVEAL
+          Each slide has 3 players + center Visit Players Page button
+         ========================================================================= */}
       <div
         ref={pinRef}
-        className="relative h-screen w-full overflow-hidden"
+        className="hidden md:block relative h-screen w-full overflow-hidden"
       >
-        {/* CARDS STACK */}
-        {playing11Cards.map((card, index) => {
+        {playing11Cards.map((card, cardIdx) => {
           const isWhite = card.theme === "white";
-          const isSolo = card.players.length === 1;
 
           return (
             <div
               key={card.id}
               ref={(el) => {
-                cardsRef.current[index] = el;
+                slidesRef.current[cardIdx] = el;
               }}
-              style={{ zIndex: 10 + index * 5 }}
-              className={`absolute inset-0 h-full w-full flex flex-col justify-between overflow-hidden shadow-2xl transition-colors ${
+              style={{ zIndex: 10 + cardIdx }}
+              className={`absolute inset-0 h-full w-full flex flex-col justify-between overflow-hidden shadow-2xl ${
                 isWhite
                   ? "bg-[#FFFFFF] text-[#0A0E1A]"
-                  : "bg-gradient-to-br from-[#E64200] via-[#FF5500] to-[#BA2300] text-white"
+                  : "bg-gradient-to-br from-[#D93800] via-[#F4570B] to-[#C92F00] text-white"
               }`}
             >
-              {/* Subtle Architectural Grid Lines from Footer for orange cards */}
+              {/* Subtle Architectural Grid Lines */}
               {!isWhite && (
                 <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-8 pointer-events-none z-0">
                   <div className="border-r border-white/[0.08] h-full" />
                   <div className="border-r border-white/[0.08] h-full" />
                   <div className="border-r border-white/[0.08] h-full" />
                   <div className="border-r border-white/[0.08] h-full" />
-                  <div className="hidden md:block border-r border-white/[0.08] h-full" />
-                  <div className="hidden md:block border-r border-white/[0.08] h-full" />
-                  <div className="hidden md:block border-r border-white/[0.08] h-full" />
-                  <div className="hidden md:block h-full" />
+                  <div className="border-r border-white/[0.08] h-full" />
+                  <div className="border-r border-white/[0.08] h-full" />
+                  <div className="border-r border-white/[0.08] h-full" />
+                  <div className="h-full" />
                 </div>
               )}
 
-              {/* Subtle background sports watermark / contour lines */}
+              {/* Dotted Grid Background */}
               <div
-                className={`absolute inset-0 pointer-events-none opacity-[0.03] ${
-                  isWhite ? "mix-blend-multiply" : "mix-blend-overlay"
-                }`}
+                className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay z-0"
                 style={{
                   backgroundImage:
                     "radial-gradient(#000 1.2px, transparent 1.2px), radial-gradient(#000 1.2px, #FFFFFF 1.2px)",
@@ -154,586 +158,275 @@ export function Playing11Section() {
                 }}
               />
 
-              {/* TOP EDITORIAL HEADER (Matches Cadillac F1 "A TALE OF TWO ICONS" / "EXCELLENCE IN RESERVE") */}
-              {/* Added generous pt-20 sm:pt-24 md:pt-28 to ensure clean clearance below the fixed navbar */}
-              <div className="relative z-20 w-full px-6 sm:px-10 md:px-14 lg:px-20 pt-20 sm:pt-24 md:pt-28 flex flex-col md:flex-row md:items-start md:justify-between gap-3 sm:gap-4 card-text-block">
-                {/* Left Header info */}
-                <div className="max-w-xl">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span
-                      className={`inline-block w-2 h-2 rounded-full ${
-                        isWhite ? "bg-[#FF4B03]" : "bg-white"
-                      }`}
-                    />
-                    <span
-                      className={`font-forma text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] ${
-                        isWhite ? "text-[#FF4B03]" : "text-white/80"
-                      }`}
-                    >
-                      {card.category}
-                    </span>
-                  </div>
+              {/* TOP HEADER BAR */}
+              <div className="relative z-10 w-full px-8 lg:px-14 xl:px-20 pt-6 lg:pt-8 flex items-center justify-between border-b border-current/10">
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] lg:text-xs font-redzone font-bold uppercase tracking-wider ${
+                      isWhite
+                        ? "bg-[#FF4E03] text-white"
+                        : "bg-white text-[#D93800]"
+                    }`}
+                  >
+                    <Shield className="w-3 h-3" />
+                    <span>{card.category}</span>
+                  </span>
+                  <span className="font-redzone text-xs lg:text-sm font-bold uppercase tracking-widest opacity-70">
+                    SQUAD CHAPTER 0{cardIdx + 1}
+                  </span>
+                </div>
 
+                <div className="text-right">
                   <h2
-                    className={`font-redzone text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-tight leading-none ${
+                    className={`font-redzone font-black text-xl lg:text-2xl uppercase tracking-wider ${
                       isWhite ? "text-[#0A0E1A]" : "text-white"
                     }`}
                   >
                     {card.headline}
                   </h2>
-
                   <p
-                    className={`font-forma text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] mt-1 ${
-                      isWhite ? "text-slate-500" : "text-white/80"
+                    className={`font-forma text-xs lg:text-[13px] opacity-75 max-w-md ml-auto truncate ${
+                      isWhite ? "text-slate-600" : "text-white/80"
                     }`}
                   >
                     {card.subhead}
                   </p>
                 </div>
-
-                {/* Right narrative description (Cadillac F1 editorial paragraph) */}
-                <div className="max-w-md hidden md:block text-right">
-                  <p
-                    className={`font-forma text-xs sm:text-[13px] leading-relaxed ${
-                      isWhite ? "text-slate-600" : "text-white/85"
-                    }`}
-                  >
-                    {card.description}
-                  </p>
-                </div>
               </div>
 
-              {/* CENTER STAGE: ATHLETE CUTOUTS & CADILLAC F1 MICRO-DATA METADATA */}
-              <div className="relative z-10 flex-1 w-full px-4 sm:px-8 md:px-14 lg:px-20 flex items-center justify-center min-h-0">
-                {isSolo ? (
-                  /* CARD 1: SOLO CAPTAIN PAT CUMMINS */
-                  <SoloCaptainLayout player={card.players[0]} isWhite={isWhite} />
-                ) : (
-                  /* CARDS 2-6: DUAL PLAYERS (Head & Abhishek, Klaasen & Kishan, etc.) */
-                  <DualPlayerLayout
-                    player1={card.players[0]}
-                    player2={card.players[1]}
-                    isWhite={isWhite}
-                  />
-                )}
+              {/* 3 PLAYERS DESKTOP STAGE: LEFT, CENTER (WITH CTA), RIGHT */}
+              <div className="relative z-10 flex-1 grid grid-cols-3 gap-6 lg:gap-10 items-end px-8 lg:px-16 xl:px-24 pb-6">
+                {card.players.map((player, pIdx) => {
+                  const isCenter = pIdx === 1;
+
+                  return (
+                    <div
+                      key={player.id}
+                      className={`relative flex flex-col items-center justify-end h-full ${
+                        isCenter ? "z-20" : "z-10"
+                      }`}
+                    >
+                      {/* PLAYER CUTOUT IMAGE (Substantially Increased Size) */}
+                      <div
+                        className={`relative w-full flex items-end justify-center transition-transform duration-500 hover:scale-105 ${
+                          isCenter
+                            ? "h-[54vh] lg:h-[60vh] xl:h-[64vh]"
+                            : "h-[48vh] lg:h-[54vh] xl:h-[58vh]"
+                        }`}
+                      >
+                        <Image
+                          src={player.imageUrl}
+                          alt={player.name}
+                          fill
+                          priority={cardIdx === 0}
+                          sizes="(max-width: 1024px) 33vw, 420px"
+                          className="object-contain object-bottom drop-shadow-[0_20px_35px_rgba(0,0,0,0.45)]"
+                        />
+                      </div>
+
+                      {/* PLAYER DETAILS BLOCK */}
+                      <div
+                        className={`w-full text-center mt-2.5 flex flex-col items-center ${
+                          isCenter ? "pt-1" : ""
+                        }`}
+                      >
+                        {/* Short Name & Jersey */}
+                        <div className="flex items-center justify-center gap-2">
+                          <h3
+                            className={`font-redzone font-black uppercase tracking-tight leading-none ${
+                              isCenter
+                                ? "text-xl lg:text-2xl xl:text-3xl"
+                                : "text-lg lg:text-xl xl:text-2xl"
+                            } ${isWhite ? "text-[#0A0E1A]" : "text-white"}`}
+                          >
+                            {player.name}
+                          </h3>
+                          <span className="font-redzone font-black text-sm lg:text-base text-[#FF4E03]">
+                            #{player.jersey}
+                          </span>
+                        </div>
+
+                        {/* Role & Records Badges */}
+                        <div className="flex items-center gap-2 mt-1">
+                          <span
+                            className={`font-redzone text-[10px] lg:text-xs font-bold uppercase tracking-wider ${
+                              isWhite ? "text-[#FF4E03]" : "text-white/90"
+                            }`}
+                          >
+                            {player.role}
+                          </span>
+                          <span className="opacity-40">&bull;</span>
+                          <span
+                            className={`font-forma text-[10px] lg:text-xs truncate max-w-[200px] ${
+                              isWhite ? "text-slate-600" : "text-white/70"
+                            }`}
+                          >
+                            {player.ranking}
+                          </span>
+                        </div>
+
+                        {/* BUTTON TO VISIT PLAYERS PAGE (RIGHT BELOW CENTER PLAYER NAME) */}
+                        {isCenter && (
+                          <div className="mt-3.5 z-30">
+                            <Link
+                              href="/players"
+                              className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#FF4E03] via-[#FF6200] to-[#CF2E00] hover:brightness-110 text-white font-redzone font-black text-xs lg:text-sm uppercase tracking-wider shadow-2xl transition-all hover:scale-105 active:scale-95 border border-white/20 cursor-pointer"
+                              title="Visit full Sunrisers Leeds Squad page"
+                            >
+                              <span>VISIT PLAYERS PAGE</span>
+                              <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* BOTTOM FOOTER OF CARD (Micro details + Mobile description) */}
-              <div className="relative z-20 w-full px-6 sm:px-10 md:px-14 lg:px-20 pb-5 sm:pb-7 flex items-end justify-between">
-                {/* Left: Squad watermark / branding */}
-                <div className="flex flex-col">
-                  <span
-                    className={`font-redzone text-xs sm:text-sm font-black uppercase tracking-wider ${
-                      isWhite ? "text-[#0A0E1A]/40" : "text-white/40"
-                    }`}
-                  >
-                    SUNRISERS LEEDS &bull; MATCHDAY XI
-                  </span>
-                  <span
-                    className={`font-forma text-[10px] tracking-widest uppercase font-semibold ${
-                      isWhite ? "text-slate-400" : "text-white/60"
-                    }`}
-                  >
-                    OFFICIAL SQUAD LINEUP 2026
-                  </span>
-                </div>
+              {/* BOTTOM FOOTER BAR */}
+              <div className="relative z-10 w-full px-8 lg:px-14 xl:px-20 pb-5 flex items-center justify-between border-t border-current/10">
+                <span
+                  className={`font-redzone text-xs font-black uppercase tracking-wider ${
+                    isWhite ? "text-[#0A0E1A]/50" : "text-white/50"
+                  }`}
+                >
+                  SUNRISERS LEEDS &bull; MATCHDAY PLAYING 11
+                </span>
 
-                {/* Mobile-only narrative display */}
-                <div className="max-w-xs md:hidden pr-20">
-                  <p
-                    className={`font-forma text-[10px] line-clamp-2 ${
-                      isWhite ? "text-slate-500" : "text-white/80"
-                    }`}
-                  >
-                    {card.description}
-                  </p>
-                </div>
+                <span
+                  className={`font-forma text-xs font-semibold ${
+                    isWhite ? "text-slate-500" : "text-white/60"
+                  }`}
+                >
+                  SCROLL TO EXPLORE SQUAD
+                </span>
               </div>
             </div>
           );
         })}
 
-        {/* BOTTOM-RIGHT FIXED COUNTER HUD (Cadillac F1 Card Counter) */}
-        <div className="absolute right-4 sm:right-8 md:right-12 bottom-4 sm:bottom-6 z-50 flex items-center gap-2.5 sm:gap-3 bg-[#070A12]/90 backdrop-blur-md px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full border border-white/20 shadow-2xl pointer-events-none">
-          <span className="w-2 h-2 rounded-full bg-[#FF4B03] animate-pulse" />
-          <span className="font-forma text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold text-slate-300">
-            CARD
-          </span>
-          <div className="font-mono text-xs sm:text-sm md:text-base font-black tracking-widest text-white flex items-center">
-            <span className="text-[#FF4B03]">
-              {String(activeCardIndex + 1).padStart(2, "0")}
-            </span>
+        {/* BOTTOM-RIGHT CLEAN COUNTER PILL */}
+        <div className="absolute right-8 bottom-5 z-50 flex items-center gap-2 bg-[#070A12]/85 backdrop-blur-md px-4 py-2 rounded-full border border-white/15 shadow-2xl pointer-events-none">
+          <div className="font-redzone text-xs sm:text-sm font-black tracking-wider text-white flex items-center">
+            <span className="text-[#FF4E03]">{activeCardIndex + 1}</span>
             <span className="text-white/40 mx-1">/</span>
-            <span className="text-white/70">
-              {String(playing11Cards.length).padStart(2, "0")}
-            </span>
+            <span className="text-white/60">{playing11Cards.length}</span>
           </div>
 
-          {/* Mini progress dots */}
-          <div className="hidden sm:flex items-center gap-1 ml-1.5 pl-2 border-l border-white/20">
+          <div className="flex items-center gap-1 ml-1.5 pl-2 border-l border-white/20">
             {playing11Cards.map((_, i) => (
               <span
                 key={i}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  activeCardIndex === i
-                    ? "w-4 bg-[#FF4B03]"
-                    : "w-1.5 bg-white/25"
+                  activeCardIndex === i ? "w-4 bg-[#FF4E03]" : "w-1.5 bg-white/25"
                 }`}
               />
             ))}
           </div>
         </div>
       </div>
+
+      {/* =========================================================================
+          MOBILE VIEW (< md): NORMAL SLIDER (NOT ON SCROLL)
+          1 player per card, left/right buttons, enlarged image + Visit Players Page
+         ========================================================================= */}
+      <div className="block md:hidden relative w-full min-h-[92vh] px-4 py-12 flex flex-col justify-between bg-gradient-to-b from-[#0A0E1A] via-[#0E1424] to-[#070A12] text-white">
+        {/* MOBILE SECTION TITLE */}
+        <div className="text-center pb-4 border-b border-white/10">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#FF4E03] animate-pulse" />
+            <span className="font-redzone text-[10px] font-bold uppercase tracking-[0.25em] text-[#FF4E03]">
+              OFFICIAL SQUAD
+            </span>
+          </div>
+          <h2 className="font-redzone text-3xl font-black uppercase tracking-wider text-white">
+            PLAYING 11
+          </h2>
+        </div>
+
+        {/* SINGLE PLAYER CARD WITH ANIMATED TRANSITION */}
+        <div className="relative flex-1 flex flex-col items-center justify-center my-6 overflow-hidden">
+          <AnimatePresence mode="wait" custom={mobileDirection}>
+            <motion.div
+              key={activeMobilePlayer.id}
+              custom={mobileDirection}
+              initial={{ opacity: 0, x: mobileDirection * 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -mobileDirection * 60 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="w-full flex flex-col items-center justify-center text-center"
+            >
+              {/* ENLARGED PLAYER CUTOUT IMAGE FOR MOBILE */}
+              <div className="relative w-full h-[46vh] max-h-[420px] flex items-end justify-center">
+                <Image
+                  src={activeMobilePlayer.imageUrl}
+                  alt={activeMobilePlayer.name}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 90vw, 380px"
+                  className="object-contain object-bottom drop-shadow-[0_20px_30px_rgba(0,0,0,0.6)]"
+                />
+              </div>
+
+              {/* PLAYER METADATA */}
+              <div className="w-full mt-4 space-y-1.5 px-2">
+                <span className="inline-block px-3 py-0.5 rounded-full bg-[#FF4E03]/20 border border-[#FF4E03]/40 text-[#FF4E03] font-redzone text-[11px] font-bold tracking-wider uppercase">
+                  JERSEY #{activeMobilePlayer.jersey} &bull; {activeMobilePlayer.role}
+                </span>
+
+                <h3 className="font-redzone font-black text-2xl sm:text-3xl text-white uppercase tracking-tight leading-tight">
+                  {activeMobilePlayer.name}
+                </h3>
+
+                <p className="font-forma text-xs text-white/70 max-w-xs mx-auto line-clamp-1">
+                  {activeMobilePlayer.ranking} &bull; {activeMobilePlayer.records}
+                </p>
+
+                {/* VISIT PLAYERS PAGE BUTTON FOR EACH PLAYER CARD */}
+                <div className="pt-3">
+                  <Link
+                    href="/players"
+                    className="inline-flex items-center justify-center gap-2 w-full max-w-xs py-3 px-6 rounded-lg bg-gradient-to-r from-[#FF4E03] via-[#FF6200] to-[#CF2E00] text-white font-redzone font-black text-xs uppercase tracking-wider shadow-xl border border-white/20 active:scale-95 transition-all"
+                  >
+                    <span>VISIT PLAYERS PAGE</span>
+                    <ArrowUpRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* MOBILE NAVIGATION CONTROLS (PREV, COUNTER, NEXT) */}
+        <div className="w-full pt-4 border-t border-white/10 flex items-center justify-between">
+          <button
+            onClick={handleMobilePrev}
+            aria-label="Previous player"
+            className="w-11 h-11 rounded-lg border border-white/20 bg-white/5 hover:bg-[#FF4E03] text-white transition-all flex items-center justify-center active:scale-95 cursor-pointer shadow-lg"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+
+          <div className="font-redzone text-sm font-black tracking-widest text-white flex items-center gap-1">
+            <span className="text-[#FF4E03]">
+              {String(mobileIndex + 1).padStart(2, "0")}
+            </span>
+            <span className="text-white/40">/</span>
+            <span className="text-white/60">
+              {String(allPlayers.length).padStart(2, "0")}
+            </span>
+          </div>
+
+          <button
+            onClick={handleMobileNext}
+            aria-label="Next player"
+            className="w-11 h-11 rounded-lg border border-white/20 bg-white/5 hover:bg-[#FF4E03] text-white transition-all flex items-center justify-center active:scale-95 cursor-pointer shadow-lg"
+          >
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
     </section>
-  );
-}
-
-// --------------------------------------------------------------------------
-// SOLO CAPTAIN COMPONENT (CARD 1 - PAT CUMMINS)
-// --------------------------------------------------------------------------
-function SoloCaptainLayout({
-  player,
-  isWhite
-}: {
-  player: PlayerData;
-  isWhite: boolean;
-}) {
-  return (
-    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-4 sm:gap-6 lg:gap-8 h-full">
-      {/* Left Column: Key Stats & Leadership Highlights */}
-      <div className="hidden md:flex md:col-span-3 flex-col justify-center space-y-5 text-left card-text-block">
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-1 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            ROLE & SPECIALISM
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-sm font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player.role}
-          </p>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-1 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            BOWLING STYLE
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-sm font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player.bowlingStyle}
-          </p>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-1 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            GLOBAL RANKING
-          </span>
-          <div className="flex items-center gap-1.5">
-            <Trophy className="w-3.5 h-3.5 text-[#FF4B03]" />
-            <p
-              className={`font-forma text-xs sm:text-sm font-black uppercase tracking-wider ${
-                isWhite ? "text-[#0A0E1A]" : "text-white"
-              }`}
-            >
-              {player.ranking}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Center Stage: Pat Cummins Cutout & Link */}
-      <div className="md:col-span-6 flex flex-col items-center justify-center relative player-cutout h-full">
-        {/* Subtle radial aura behind captain */}
-        <div
-          className={`absolute w-72 sm:w-96 h-72 sm:h-96 rounded-full blur-3xl pointer-events-none opacity-40 -z-10 ${
-            isWhite ? "bg-[#FF4B03]/15" : "bg-black/30"
-          }`}
-        />
-
-        <Link
-          href={player.link}
-          className="group relative flex flex-col items-center cursor-pointer"
-          title={`View full profile for ${player.name}`}
-        >
-          {/* Athlete Image Container */}
-          <div className="relative w-56 sm:w-72 md:w-80 lg:w-96 h-[44vh] sm:h-[48vh] md:h-[52vh] transition-transform duration-500 group-hover:scale-105">
-            <Image
-              src={player.imageUrl}
-              alt={player.name}
-              fill
-              priority
-              sizes="(max-width: 768px) 280px, 420px"
-              className="object-contain object-bottom drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)]"
-            />
-          </div>
-
-          {/* Under Athlete Name & Jersey Tag (Cadillac F1 S.PEREZ 11 format) */}
-          <div className="mt-2 text-center flex flex-col items-center">
-            <div className="flex items-center gap-2">
-              <span
-                className={`font-redzone text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wider ${
-                  isWhite ? "text-[#0A0E1A]" : "text-white"
-                }`}
-              >
-                {player.shortName}
-              </span>
-              <span className="font-redzone text-2xl sm:text-3xl md:text-4xl font-black text-[#FF4B03]">
-                {player.jersey}
-              </span>
-              <ArrowUpRight
-                className={`w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 ${
-                  isWhite ? "text-[#FF4B03]" : "text-white"
-                }`}
-              />
-            </div>
-            <span
-              className={`font-forma text-[10px] tracking-[0.25em] uppercase font-bold ${
-                isWhite ? "text-slate-400" : "text-white/70"
-              }`}
-            >
-              CLICK TO VIEW PROFILE
-            </span>
-          </div>
-        </Link>
-      </div>
-
-      {/* Right Column: Micro metadata block */}
-      <div className="hidden md:flex md:col-span-3 flex-col justify-center space-y-5 text-right card-text-block">
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-1 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            NATIONALITY
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-sm font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player.nationality}
-          </p>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-1 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            BORN IN / AGE
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-sm font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player.bornIn} &bull; {player.age}
-          </p>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-1 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            CAREER RECORDS
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-sm font-black uppercase tracking-wider leading-snug ${
-              isWhite ? "text-[#FF4B03]" : "text-white"
-            }`}
-          >
-            {player.records}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// --------------------------------------------------------------------------
-// DUAL PLAYER COMPONENT (CARDS 2 TO 6 - 2 PLAYERS EACH)
-// --------------------------------------------------------------------------
-function DualPlayerLayout({
-  player1,
-  player2,
-  isWhite
-}: {
-  player1: PlayerData;
-  player2: PlayerData;
-  isWhite: boolean;
-}) {
-  return (
-    <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-2 sm:gap-4 lg:gap-6 h-full">
-      {/* LEFT ATHLETE METADATA COLUMN (Cadillac F1 Left Athlete Data) */}
-      <div className="hidden md:flex md:col-span-2 flex-col justify-center space-y-4 text-left card-text-block">
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-0.5 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            NAME
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-[13px] font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player1.name}
-          </p>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-0.5 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            ROLE
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-[13px] font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player1.role}
-          </p>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-0.5 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            BORN IN / AGE
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-[13px] font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player1.bornIn}
-          </p>
-          <span
-            className={`font-forma text-[11px] font-semibold uppercase ${
-              isWhite ? "text-slate-500" : "text-white/80"
-            }`}
-          >
-            {player1.age}
-          </span>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-0.5 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            KEY RECORD
-          </span>
-          <p
-            className={`font-forma text-xs font-black uppercase tracking-wide leading-tight ${
-              isWhite ? "text-[#FF4B03]" : "text-white"
-            }`}
-          >
-            {player1.records}
-          </p>
-        </div>
-      </div>
-
-      {/* CENTER ATHLETES STAGE: TWO ATHLETE CUTOUTS SIDE-BY-SIDE */}
-      <div className="md:col-span-8 grid grid-cols-2 gap-2 sm:gap-6 lg:gap-10 items-end justify-center player-cutout h-full pb-2">
-        {/* ATHLETE 1 (Left Player) */}
-        <Link
-          href={player1.link}
-          className="group relative flex flex-col items-center cursor-pointer"
-          title={`View full profile for ${player1.name}`}
-        >
-          <div className="relative w-36 sm:w-56 md:w-64 lg:w-72 h-[40vh] sm:h-[46vh] md:h-[50vh] transition-transform duration-500 group-hover:scale-105">
-            <Image
-              src={player1.imageUrl}
-              alt={player1.name}
-              fill
-              priority
-              sizes="(max-width: 768px) 180px, 320px"
-              className="object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.3)]"
-            />
-          </div>
-
-          {/* Under Athlete Athletic Typography (Cadillac F1 S.PEREZ 11) */}
-          <div className="mt-2 text-center flex flex-col items-center">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <span
-                className={`font-redzone text-lg sm:text-2xl md:text-3xl font-black uppercase tracking-wider ${
-                  isWhite ? "text-[#0A0E1A]" : "text-white"
-                }`}
-              >
-                {player1.shortName}
-              </span>
-              <span className="font-redzone text-lg sm:text-2xl md:text-3xl font-black text-[#FF4B03]">
-                {player1.jersey}
-              </span>
-              <ArrowUpRight
-                className={`w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 ${
-                  isWhite ? "text-[#FF4B03]" : "text-white"
-                }`}
-              />
-            </div>
-            <span
-              className={`font-forma text-[8px] sm:text-[9px] tracking-[0.2em] uppercase font-bold ${
-                isWhite ? "text-slate-400" : "text-white/70"
-              }`}
-            >
-              {player1.role}
-            </span>
-          </div>
-        </Link>
-
-        {/* ATHLETE 2 (Right Player) */}
-        <Link
-          href={player2.link}
-          className="group relative flex flex-col items-center cursor-pointer"
-          title={`View full profile for ${player2.name}`}
-        >
-          <div className="relative w-36 sm:w-56 md:w-64 lg:w-72 h-[40vh] sm:h-[46vh] md:h-[50vh] transition-transform duration-500 group-hover:scale-105">
-            <Image
-              src={player2.imageUrl}
-              alt={player2.name}
-              fill
-              priority
-              sizes="(max-width: 768px) 180px, 320px"
-              className="object-contain object-bottom drop-shadow-[0_15px_30px_rgba(0,0,0,0.3)]"
-            />
-          </div>
-
-          {/* Under Athlete Athletic Typography (Cadillac F1 V.BOTTAS 77) */}
-          <div className="mt-2 text-center flex flex-col items-center">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <span
-                className={`font-redzone text-lg sm:text-2xl md:text-3xl font-black uppercase tracking-wider ${
-                  isWhite ? "text-[#0A0E1A]" : "text-white"
-                }`}
-              >
-                {player2.shortName}
-              </span>
-              <span className="font-redzone text-lg sm:text-2xl md:text-3xl font-black text-[#FF4B03]">
-                {player2.jersey}
-              </span>
-              <ArrowUpRight
-                className={`w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 ${
-                  isWhite ? "text-[#FF4B03]" : "text-white"
-                }`}
-              />
-            </div>
-            <span
-              className={`font-forma text-[8px] sm:text-[9px] tracking-[0.2em] uppercase font-bold ${
-                isWhite ? "text-slate-400" : "text-white/70"
-              }`}
-            >
-              {player2.role}
-            </span>
-          </div>
-        </Link>
-      </div>
-
-      {/* RIGHT ATHLETE METADATA COLUMN (Cadillac F1 Right Athlete Data) */}
-      <div className="hidden md:flex md:col-span-2 flex-col justify-center space-y-4 text-right card-text-block">
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-0.5 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            NAME
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-[13px] font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player2.name}
-          </p>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-0.5 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            ROLE
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-[13px] font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player2.role}
-          </p>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-0.5 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            BORN IN / AGE
-          </span>
-          <p
-            className={`font-forma text-xs sm:text-[13px] font-black uppercase tracking-wider ${
-              isWhite ? "text-[#0A0E1A]" : "text-white"
-            }`}
-          >
-            {player2.bornIn}
-          </p>
-          <span
-            className={`font-forma text-[11px] font-semibold uppercase ${
-              isWhite ? "text-slate-500" : "text-white/80"
-            }`}
-          >
-            {player2.age}
-          </span>
-        </div>
-
-        <div>
-          <span
-            className={`font-forma text-[9px] uppercase tracking-[0.2em] font-bold block mb-0.5 ${
-              isWhite ? "text-slate-400" : "text-white/60"
-            }`}
-          >
-            KEY RECORD
-          </span>
-          <p
-            className={`font-forma text-xs font-black uppercase tracking-wide leading-tight ${
-              isWhite ? "text-[#FF4B03]" : "text-white"
-            }`}
-          >
-            {player2.records}
-          </p>
-        </div>
-      </div>
-    </div>
   );
 }

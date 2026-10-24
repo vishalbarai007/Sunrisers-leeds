@@ -137,7 +137,7 @@ export function SpotlightSection() {
         >
           <div className="flex items-center gap-2 mb-2">
             <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-            <span className="font-forma text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-white/90">
+            <span className="font-redzone text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-white/90">
               SOCIAL FEED & HIGHLIGHTS
             </span>
           </div>
@@ -150,7 +150,7 @@ export function SpotlightSection() {
             href="https://www.instagram.com/sunrisershyd/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3.5 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 backdrop-blur-md text-white font-forma text-sm sm:text-base font-semibold transition-all group shadow-sm hover:scale-105 active:scale-95"
+            className="mt-3.5 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 backdrop-blur-md text-white font-redzone text-xs sm:text-sm font-black uppercase tracking-wider transition-all group shadow-sm hover:scale-105 active:scale-95"
           >
             <Image
               src="/images/Instagram.svg"

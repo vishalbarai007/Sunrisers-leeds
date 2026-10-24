@@ -175,7 +175,7 @@ export function HeroSection() {
     <section
       id="hero-section"
       ref={heroRef}
-      className="relative w-full h-screen min-h-[750px] bg-[#070A12] overflow-hidden select-none"
+      className="relative w-full h-[100dvh] lg:h-screen min-h-[640px] sm:min-h-[700px] lg:min-h-[750px] bg-[#070A12] overflow-hidden select-none"
     >
       {/* Architectural Grid Lines */}
       <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-8 pointer-events-none z-10">
@@ -211,18 +211,18 @@ export function HeroSection() {
       </div>
 
       {/* 4. MAIN MIDDLE ROW (VERTICALLY CENTERED: Left Stats <---> Center LEEDS <---> Right Details) */}
-      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 px-6 sm:px-10 md:px-[60px] flex items-center justify-between pointer-events-none">
-        {/* LEFT STATS COLUMN (Matches played, won, win rate - vertically centered at leftmost side) */}
+      <div className="absolute inset-x-0 top-[40%] sm:top-[44%] lg:top-1/2 -translate-y-1/2 z-20 px-4 sm:px-8 md:px-12 lg:px-[60px] flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-3.5 sm:gap-5 lg:gap-0 pointer-events-none">
+        {/* LEFT STATS COLUMN (Matches played, won, win rate - vertically centered at leftmost side on desktop, 3-col row on mobile/tablet) */}
         <div
           ref={leftColRef}
-          className="w-[170px] sm:w-[220px] lg:w-[260px] shrink-0 space-y-6 sm:space-y-8 pointer-events-auto"
+          className="order-2 lg:order-1 w-full max-w-md sm:max-w-xl lg:max-w-none lg:w-[260px] shrink-0 grid grid-cols-3 lg:block gap-2 sm:gap-6 lg:gap-0 lg:space-y-8 text-center lg:text-left pointer-events-auto"
         >
           {heroData.leftStats.map((stat) => (
             <div key={stat.label} className="group">
-              <div className="font-redzone text-5xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-none group-hover:text-[#FF4B03] transition-colors duration-300">
+              <div className="font-redzone text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-white tracking-tight leading-none group-hover:text-[#FF4B03] transition-colors duration-300">
                 {stat.value}
               </div>
-              <div className="font-forma text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mt-1.5">
+              <div className="font-forma text-[9px] sm:text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] sm:tracking-[0.18em] text-slate-400 mt-1 sm:mt-1.5">
                 {stat.label}
               </div>
             </div>
@@ -230,123 +230,123 @@ export function HeroSection() {
         </div>
 
         {/* CENTER: GIANT LEEDS TYPOGRAPHY (Vertically centered, in center between left and right) */}
-        <div className="flex-1 flex items-center justify-center px-2 sm:px-6 overflow-visible pointer-events-none">
+        <div className="order-1 lg:order-2 w-full lg:w-auto lg:flex-1 flex items-center justify-center px-2 sm:px-6 overflow-visible pointer-events-none">
           <h1
             ref={centerTextRef}
-            className="font-redzone text-[15vw] sm:text-[16vw] lg:text-[18vw] font-black uppercase tracking-tighter text-white/95 leading-none select-none text-center drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] will-change-transform origin-center"
+            className="font-redzone text-[22vw] sm:text-[18vw] md:text-[17vw] lg:text-[18vw] font-black uppercase tracking-tighter text-white/95 leading-none select-none text-center drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] will-change-transform origin-center"
             style={{ letterSpacing: "-0.04em" }}
           >
             {heroData.centerText}
           </h1>
         </div>
 
-        {/* RIGHT DETAILS COLUMN (Motto, Ground, Format - vertically centered at rightmost side) */}
+        {/* RIGHT DETAILS COLUMN (Motto, Ground, Format - vertically centered at rightmost side on desktop) */}
         <div
           ref={rightColRef}
-          className="w-[200px] sm:w-[260px] lg:w-[320px] shrink-0 text-right space-y-5 sm:space-y-6 pointer-events-auto"
+          className="order-3 w-full max-w-md sm:max-w-xl lg:max-w-none lg:w-[320px] shrink-0 flex flex-col sm:flex-row lg:block items-center justify-between gap-2 sm:gap-6 lg:gap-0 text-center sm:text-left lg:text-right lg:space-y-6 pointer-events-auto"
         >
-          <p className="font-forma text-xs sm:text-sm lg:text-[15px] font-normal text-slate-200 leading-relaxed italic text-right">
-            &ldquo;{heroData.tagline}. {heroData.subheadline}&rdquo;
+          <p className="font-forma text-[11px] sm:text-xs md:text-sm lg:text-[15px] font-normal text-slate-200 leading-snug sm:leading-relaxed italic text-center sm:text-left lg:text-right max-w-xs sm:max-w-sm lg:max-w-none">
+            &ldquo;{heroData.tagline}. <br /> {heroData.subheadline}&rdquo;
           </p>
 
-          <div className="space-y-4 pt-1">
+          <div className="space-y-1 lg:space-y-4 pt-0.5 lg:pt-1 shrink-0 text-center sm:text-right">
             <div>
-              <div className="font-forma text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-500">
+              {/* <div className="font-forma text-[9px] sm:text-[10px] lg:text-xs font-bold uppercase tracking-widest text-slate-500">
                 Home Ground
-              </div>
-              <div className="font-heading text-sm sm:text-lg lg:text-xl font-bold text-white uppercase flex items-center justify-end gap-1.5 mt-0.5">
+              </div> */}
+              {/* <div className="font-heading text-xs sm:text-base md:text-lg lg:text-xl font-bold text-white uppercase flex items-center justify-center sm:justify-end gap-1.5 mt-0.5">
                 <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF4B03] shrink-0" />
                 <span>{heroData.rightInfo.venue}</span>
-              </div>
-              <div className="font-forma text-[11px] sm:text-xs text-slate-400">
+              </div> */}
+              {/* <div className="font-forma text-[10px] sm:text-xs text-slate-400">
                 {heroData.rightInfo.city}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </div>
 
-      {/* 5. BOTTOM SECTION (EXTREME CORNERS WITH P-15 / 60PX SPACING) */}
-      <div className="absolute inset-x-0 bottom-6 sm:bottom-8 md:bottom-[50px] z-20 px-6 sm:px-10 md:px-[60px] flex items-end justify-between pointer-events-none">
+      {/* 5. BOTTOM SECTION (EXTREME CORNERS WITH P-15 / 60PX SPACING ON DESKTOP) */}
+      <div className="absolute inset-x-0 bottom-10 sm:bottom-11 md:bottom-12 lg:bottom-[50px] z-20 px-4 sm:px-8 md:px-12 lg:px-[60px] flex flex-col sm:flex-row items-center sm:items-end justify-between gap-3 sm:gap-4 pointer-events-none">
         {/* Bottom-Left Corner: Official Sports Club badge, Title, Ethos & Partners */}
         <div
           ref={bottomLeftRef}
-          className="max-w-sm sm:max-w-md pointer-events-auto"
+          className="max-w-sm sm:max-w-[260px] md:max-w-sm lg:max-w-md text-center sm:text-left pointer-events-auto"
         >
-          <h2 className="font-redzone text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-wider uppercase leading-none mb-2">
+          <h2 className="font-redzone text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-wider uppercase leading-none mb-1.5 sm:mb-2">
             {heroData.teamName}
           </h2>
-          {/* <p className="font-forma text-xs sm:text-sm text-slate-400 leading-relaxed mb-3 line-clamp-2">
-            {heroData.quote}
-          </p> */}
           {/* Sponsor marks strip */}
-          <div className="flex flex-wrap items-center gap-2.5 text-[10px] sm:text-[11px] font-forma font-bold text-slate-500 uppercase tracking-widest">
+          {/* <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-2.5 text-[9px] sm:text-[11px] font-forma font-bold text-slate-500 uppercase tracking-widest">
             {heroData.partners.map((partner, i) => (
-              <span key={partner} className="flex items-center gap-2.5">
+              <span key={partner} className="flex items-center gap-2 sm:gap-2.5">
                 <span className="hover:text-slate-300 transition-colors">{partner}</span>
                 {i < heroData.partners.length - 1 && (
                   <span className="text-white/20">&bull;</span>
                 )}
               </span>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom-Right Corner: Next Fixture Card with Live Ticking Countdown */}
         <div
           ref={bottomRightRef}
-          className="ml-auto pointer-events-auto hidden sm:block"
+          className="w-full max-w-[300px] sm:max-w-[270px] md:max-w-xs lg:max-w-sm sm:ml-auto pointer-events-auto"
         >
-          <div className="p-4 sm:p-5 rounded-xl border border-white/10 bg-[#0A0E1A]/85 backdrop-blur-md shadow-2xl max-w-xs sm:max-w-sm w-full">
-            <div className="flex items-center justify-between gap-3 mb-2.5">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#FF4B03] text-[#070A12] text-[10px] font-forma font-black uppercase tracking-wider">
-                <Calendar className="w-3 h-3" />
+          <div className="relative overflow-hidden p-2.5 sm:p-3.5 md:p-4 lg:p-5 rounded-xl border border-white/20 bg-[#0A0E1A]/40 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_32px_0_rgba(0,0,0,0.37),inset_0_1px_1px_0_rgba(255,255,255,0.2)] w-full transition-all duration-300 hover:border-white/30">
+            {/* Top specular highlight for authentic glass finish */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+
+            <div className="flex items-center justify-between gap-2 sm:gap-3 mb-1.5 sm:mb-2.5">
+              <span className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded bg-[#FF4B03] text-[#070A12] text-[9px] sm:text-[10px] font-redzone font-black uppercase tracking-wider shadow-sm">
+                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                 <span>Next Fixture</span>
               </span>
-              <span className="text-[11px] font-forma font-semibold text-slate-400">
+              <span className="text-[10px] sm:text-[11px] font-forma font-semibold text-slate-300 truncate">
                 {heroData.rightInfo.nextMatch.venue}
               </span>
             </div>
 
-            <div className="font-redzone text-xl sm:text-2xl font-black text-white uppercase tracking-wide mb-2.5">
+            <div className="font-redzone text-base sm:text-xl lg:text-2xl font-black text-white uppercase tracking-wide mb-1.5 sm:mb-2.5">
               {heroData.rightInfo.nextMatch.opponent}
             </div>
 
             {/* Countdown Ticker Blocks */}
-            <div className="grid grid-cols-4 gap-2 text-center pt-2 border-t border-white/10">
-              <div className="bg-[#070A12]/90 rounded-md py-1.5 px-1 border border-white/5">
-                <div className="font-redzone text-lg sm:text-xl font-bold text-white leading-tight">
+            {/* <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-center pt-1.5 sm:pt-2 border-t border-white/10">
+              <div className="bg-white/[0.06] backdrop-blur-sm rounded-md py-1 sm:py-1.5 px-1 border border-white/10">
+                <div className="font-redzone text-sm sm:text-lg lg:text-xl font-bold text-white leading-tight">
                   {timeLeft.days}
                 </div>
-                <div className="font-forma text-[8px] uppercase tracking-wider text-slate-500">
+                <div className="font-forma text-[7px] sm:text-[8px] uppercase tracking-wider text-slate-400">
                   Days
                 </div>
               </div>
-              <div className="bg-[#070A12]/90 rounded-md py-1.5 px-1 border border-white/5">
-                <div className="font-redzone text-lg sm:text-xl font-bold text-white leading-tight">
+              <div className="bg-white/[0.06] backdrop-blur-sm rounded-md py-1 sm:py-1.5 px-1 border border-white/10">
+                <div className="font-redzone text-sm sm:text-lg lg:text-xl font-bold text-white leading-tight">
                   {timeLeft.hours}
                 </div>
-                <div className="font-forma text-[8px] uppercase tracking-wider text-slate-500">
+                <div className="font-forma text-[7px] sm:text-[8px] uppercase tracking-wider text-slate-400">
                   Hours
                 </div>
               </div>
-              <div className="bg-[#070A12]/90 rounded-md py-1.5 px-1 border border-white/5">
-                <div className="font-redzone text-lg sm:text-xl font-bold text-white leading-tight">
+              <div className="bg-white/[0.06] backdrop-blur-sm rounded-md py-1 sm:py-1.5 px-1 border border-white/10">
+                <div className="font-redzone text-sm sm:text-lg lg:text-xl font-bold text-white leading-tight">
                   {timeLeft.minutes}
                 </div>
-                <div className="font-forma text-[8px] uppercase tracking-wider text-slate-500">
+                <div className="font-forma text-[7px] sm:text-[8px] uppercase tracking-wider text-slate-400">
                   Mins
                 </div>
               </div>
-              <div className="bg-[#070A12]/90 rounded-md py-1.5 px-1 border border-white/5">
-                <div className="font-redzone text-lg sm:text-xl font-bold text-[#FF4B03] leading-tight">
+              <div className="bg-white/[0.06] backdrop-blur-sm rounded-md py-1 sm:py-1.5 px-1 border border-white/10">
+                <div className="font-redzone text-sm sm:text-lg lg:text-xl font-bold text-[#FF4B03] leading-tight">
                   {timeLeft.seconds}
                 </div>
-                <div className="font-forma text-[8px] uppercase tracking-wider text-slate-500">
+                <div className="font-forma text-[7px] sm:text-[8px] uppercase tracking-wider text-slate-400">
                   Secs
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -356,7 +356,7 @@ export function HeroSection() {
         ref={scrollCueRef}
         className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex flex-col items-center gap-1 opacity-70"
       >
-        <span className="font-forma text-[9px] uppercase tracking-[0.3em] text-slate-400 font-bold">
+        <span className="font-redzone text-[9px] uppercase tracking-[0.3em] text-slate-400 font-bold">
           Scroll Down
         </span>
         <ChevronDown className="w-4 h-4 text-[#FF4B03] animate-bounce" />
